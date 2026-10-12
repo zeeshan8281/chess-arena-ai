@@ -10,7 +10,7 @@ process.on('SIGTERM',()=>{stopping=true}); process.on('SIGINT',()=>{stopping=tru
 const heartbeat = async()=>{await arena.pool.query('INSERT INTO arena_worker(id,heartbeat) VALUES(1,now()) ON CONFLICT(id) DO UPDATE SET heartbeat=now()')};
 await heartbeat();
 const timer = setInterval(()=>{void heartbeat().catch(()=>{});},2000);
-console.log('Arena worker ready; persistent total budget: $5.00');
+console.log('Arena worker ready; using persistent database budget');
 try {
   while (!stopping) {
     const games = (await arena.pool.query("SELECT g.* FROM arena_games g JOIN validation_matches m ON m.id=g.match_id WHERE m.status='ongoing' ORDER BY g.created_at")).rows;

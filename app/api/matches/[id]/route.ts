@@ -9,7 +9,7 @@ export async function GET(request:Request,context:Context) {
     const game = await (await getArena()).detail(id);
     if (!game) return Response.json({error:'Match not found'},{status:404});
     if (new URL(request.url).searchParams.get('format')==='pgn') return new Response(game.pgn,{headers:{'Content-Type':'application/x-chess-pgn','Content-Disposition':`attachment; filename="arena-${id}.pgn"`}});
-    return Response.json(game);
+    return Response.json(game,{headers:new URL(request.url).searchParams.get('format')==='json'?{'Content-Disposition':`attachment; filename="arena-${id}.json"`}:{}});
   } catch { return Response.json({error:'Could not load match'},{status:503}); }
 }
 export async function POST(request:Request,context:Context) {

@@ -30,3 +30,13 @@ test('mutation guard rejects cross-origin and unauthenticated remote requests',(
  assert.equal(Boolean(mutationAllowed(req('https://arena.example',{host:'arena.example',origin:'https://arena.example',authorization:'Bearer test-secret'}))),true);
  }finally{if(prior===undefined)delete process.env.ARENA_OPERATOR_TOKEN;else process.env.ARENA_OPERATOR_TOKEN=prior;}
 });
+
+ test('GPT-4.1 routing omits unsupported reasoning parameters; Gemini explicitly disables reasoning',async()=>{
+  for(const model of ['openai/gpt-4.1-mini','google/gemini-2.5-flash']) {
+   await openRouterMove(model,{fen:DEFAULT_POSITION,legalMoves:['e2e4'],historyUci:[]},{apiKey:'test',fetch:async(_url,init)=>{
+    const body=JSON.parse(String(init?.body));
+    assert.deepEqual(body.reasoning,model.startsWith('google/')?{enabled:false}:undefined);
+    return Response.json({choices:[{finish_reason:'stop',message:{content:'{"moveUci":"e2e4"}'}}],usage:{cost:0}});
+   }});
+  }
+ });

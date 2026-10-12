@@ -22,7 +22,7 @@ export async function openRouterMove(model: string, turn: { fen: string; legalMo
       method: 'POST', signal: controller.signal,
       headers: { Authorization: `Bearer ${options.apiKey}`, 'Content-Type': 'application/json', 'X-OpenRouter-Title': 'Local AI Chess Arena' },
       body: JSON.stringify({ model, messages, max_tokens: 1024, stream: false,
-        reasoning: { enabled: false }, response_format: { type: 'json_object' },
+        ...(model.startsWith('google/gemini-') ? { reasoning: { enabled: false } } : {}), response_format: { type: 'json_object' },
         provider: { allow_fallbacks: false, require_parameters: true, max_price: { prompt: 2, completion: 10, request: 0 } } }),
     });
     reader = response.body?.getReader();
