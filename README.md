@@ -128,7 +128,7 @@ Provider errors, illegal responses, timeouts, cancellation, and the 160-ply limi
 
 The referee validates ordinary moves, promotions, castling, en passant, checkmate, stalemate, repetition, and move-count rules. It supports current and intended-move draw claims; the worker automatically takes an available current-position draw claim.
 
-**All games remain unrated.** General dead-position adjudication and arbitrary timeout mating-possibility proofs are not complete. The default prompt receives a legal-move list, so these runs do not measure unaided chess-legality knowledge. The local search policy is a small baseline, not Stockfish. A handful of games is not a reliable strength estimate, and its results are not comparable to FIDE or Lichess Elo.
+**All games remain unrated.** General dead-position adjudication and arbitrary timeout mating-possibility proofs are not complete. The current `legal-choice-v2` protocol receives a legal-move list and a strict response schema enumerating those choices (older records retain `legal-json-v1`), so these runs do not measure unaided chess-legality knowledge. The local search policy is a small baseline, not Stockfish. A handful of games is not a reliable strength estimate, and its results are not comparable to FIDE or Lichess Elo.
 
 Model APIs are not deterministic reproduction guarantees. Record provider, model/date, prompt, budget, tool policy, and failures alongside the game artifacts.
 

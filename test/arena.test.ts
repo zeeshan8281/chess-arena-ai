@@ -15,7 +15,7 @@ test('model replies require exact JSON and a legal move',()=>{
 });
 test('OpenRouter uses bounded single dispatch and records usage before move parsing',async()=>{
  let calls=0;
- const result=await openRouterMove('test/model',{fen:DEFAULT_POSITION,legalMoves:['e2e4'],historyUci:[]},{apiKey:'test',fetch:async(_url,init)=>{calls++;const b=JSON.parse(String(init?.body));assert.equal(b.max_tokens,1024);assert.equal(b.provider.allow_fallbacks,false);assert.equal(b.provider.require_parameters,true);assert.equal(b.provider.max_price.completion,10);return Response.json({id:'request-1',model:'test/model',choices:[{finish_reason:'stop',message:{content:'{"moveUci":"e2e4"}'}}],usage:{cost:0.001,prompt_tokens:10,completion_tokens:8}})}});
+ const result=await openRouterMove('test/model',{fen:DEFAULT_POSITION,legalMoves:['e2e4'],historyUci:[]},{apiKey:'test',fetch:async(_url,init)=>{calls++;const b=JSON.parse(String(init?.body));assert.equal(b.max_tokens,1024);assert.equal(b.provider.allow_fallbacks,false);assert.equal(b.provider.require_parameters,true);assert.equal(b.provider.max_price.completion,10);assert.equal(b.response_format.type,'json_schema');assert.deepEqual(b.response_format.json_schema.schema.properties.moveUci.enum,['e2e4']);assert.equal(b.response_format.json_schema.strict,true);return Response.json({id:'request-1',model:'test/model',choices:[{finish_reason:'stop',message:{content:'{"moveUci":"e2e4"}'}}],usage:{cost:0.001,prompt_tokens:10,completion_tokens:8}})}});
  assert.equal(calls,1);assert.equal(result.costMicros,1000);assert.equal(parseMove(result.content,['e2e4']),'e2e4');
 });
 test('OpenRouter errors do not retry and oversized bodies fail closed',async()=>{

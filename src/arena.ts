@@ -3,7 +3,7 @@ import { DEFAULT_POSITION } from 'chess.js';
 import { Store, type Lease } from './store';
 import { Referee, type Outcome } from './rules';
 import { isAgent, agentName } from './agents';
-import { RESERVE_MICROS } from './openrouter';
+import { RESERVE_MICROS, MATCH_PROTOCOL } from './openrouter';
 
 export const BUDGET_ID = 'b893ff67-f32a-4b80-a821-9e752d895b3a';
 export const BUDGET_MICROS = Math.floor(Number(process.env.ARENA_BUDGET_USD ?? '5') * 1e6);
@@ -18,6 +18,7 @@ export class Arena extends Store {
         white text NOT NULL, black text NOT NULL, created_at timestamptz NOT NULL DEFAULT now(),
         max_plies integer NOT NULL DEFAULT 160
       );
+      ALTER TABLE arena_games ADD COLUMN IF NOT EXISTS protocol text NOT NULL DEFAULT 'legal-json-v1';
       CREATE TABLE IF NOT EXISTS arena_attempts (
         id uuid PRIMARY KEY, match_id uuid NOT NULL REFERENCES arena_games(match_id),
         version integer NOT NULL, agent text NOT NULL, paid boolean NOT NULL,
@@ -41,7 +42,7 @@ export class Arena extends Store {
       for (const [w,b] of paired ? [[white,black],[black,white]] : [[white,black]]) {
         const id = randomUUID(); ids.push(id);
         await client.query('INSERT INTO validation_matches(id,initial_fen,result) VALUES($1,$2,$3)', [id, DEFAULT_POSITION, new Referee().outcome()]);
-        await client.query('INSERT INTO arena_games(match_id,pair_id,white,black) VALUES($1,$2,$3,$4)', [id,pairId,w,b]);
+        await client.query('INSERT INTO arena_games(match_id,pair_id,white,black,protocol) VALUES($1,$2,$3,$4,$5)', [id,pairId,w,b,MATCH_PROTOCOL]);
       }
       await client.query('COMMIT'); return ids;
     } catch (e) { await client.query('ROLLBACK'); throw e; } finally { client.release(); }
