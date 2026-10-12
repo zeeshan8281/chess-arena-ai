@@ -173,7 +173,7 @@ Creation body:
 {"white":"local-search","black":"local-random","paired":true}
 ```
 
-Remote mutations require `Authorization: Bearer <ARENA_OPERATOR_TOKEN>` and a same-origin request when an Origin header is present. Local loopback controls are available without that token. Hosted spectators can read matches but cannot spend the operator's budget without authorization. The UI keeps an entered operator token only for the current browser session.
+Remote hosted-model match controls require `Authorization: Bearer <ARENA_OPERATOR_TOKEN>` and a same-origin request when an Origin header is present. Local loopback controls are available without that token. Hosted spectators can read matches but cannot spend the operator's budget without authorization. The UI keeps an entered operator token only for the current browser session. Public `/api/play` registration needs no account; later practice requests use a separate match-scoped player token that cannot authorize paid matches.
 
 ## Tests and verification
 
