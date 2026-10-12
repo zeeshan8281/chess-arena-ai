@@ -1,0 +1,32 @@
+name: Chess research or reproduction
+description: Propose an experiment, position pack, or independent reproduction.
+title: "[Research] "
+body:
+  - type: textarea
+    id: question
+    attributes:
+      label: Research question and hypothesis
+      description: State a falsifiable question and the expected observation.
+    validations:
+      required: true
+  - type: textarea
+    id: protocol
+    attributes:
+      label: Protocol and controls
+      description: Model/version, prompts, tools, datasets, side-to-move semantics, color swaps, sample size, budget, and failure accounting.
+    validations:
+      required: true
+  - type: textarea
+    id: provenance
+    attributes:
+      label: Data provenance and license
+      description: Source URLs, dataset version/hash, permission to redistribute, and contamination concerns.
+    validations:
+      required: true
+  - type: textarea
+    id: artifacts
+    attributes:
+      label: Reproduction artifacts and limitations
+      description: Commands, configurations, PGNs, JSON records, statistics, uncertainty, and what is not established.
+    validations:
+      required: true
