@@ -8,7 +8,7 @@ export const agents = [
 ] as const;
 export type AgentId = typeof agents[number]['id'];
 export const isAgent = (id: string): id is AgentId => agents.some(a => a.id === id);
-export const agentName = (id: string) => agents.find(a => a.id === id)?.name ?? (id.startsWith('guest:') ? id.split(':')[1] : id);
+export const agentName = (id: string) => agents.find(a => a.id === id)?.name ?? (id==='local-capture'?'Capture First':undefined) ?? ((id.startsWith('guest:')||id.startsWith('local-harness:')) ? id.split(':')[1] : id);
 const values = { p: 100, n: 320, b: 330, r: 500, q: 900, k: 0 };
 function score(chess: Chess, color: string) {
   if (chess.isCheckmate()) return chess.turn() === color ? -100000 : 100000;

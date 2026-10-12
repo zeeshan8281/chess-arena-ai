@@ -10,9 +10,10 @@ export function parseMove(content: string, legalMoves: string[]) {
   if (!legalMoves.includes(moveUci)) throw new Error('Model returned an illegal move');
   return moveUci;
 }
-export async function openRouterMove(model: string, turn: { fen: string; legalMoves: string[]; historyUci: string[] }, options: { apiKey: string; fetch?: typeof fetch; timeoutMs?: number }) {
+export async function openRouterMove(model: string, turn: { fen: string; legalMoves: string[]; historyUci: string[] }, options: { apiKey: string; fetch?: typeof fetch; timeoutMs?: number; systemPrompt?:string }) {
+  if(options.systemPrompt && options.systemPrompt.length>800)throw Error('Prompt too long');
   const messages = [
-    { role: 'system', content: 'You are playing chess. Choose the strongest legal move. Return only JSON with exactly one key: "moveUci". Use UCI coordinates such as e2e4 or a7a8q, never SAN. Choose exactly one entry from legalMoves. No markdown.' },
+    { role: 'system', content: (options.systemPrompt?options.systemPrompt+'\n':'')+'You are playing chess. Choose the strongest legal move. Return only JSON with exactly one key: "moveUci". Use UCI coordinates such as e2e4 or a7a8q, never SAN. Choose exactly one entry from legalMoves. No markdown.' },
     { role: 'user', content: JSON.stringify(turn) },
   ];
   const body = JSON.stringify({model, messages, max_tokens:1024, stream:false,

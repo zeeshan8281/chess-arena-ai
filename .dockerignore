@@ -3,3 +3,7 @@ node_modules
 .env*
 verification
 *.tsbuildinfo
+
+arena-agent*.json
+*.spend.json
+arena-agent*.lock

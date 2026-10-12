@@ -12,7 +12,8 @@
     "demo": "tsx src/demo.ts",
     "worker": "tsx src/worker.ts",
     "start:hosted": "node --import tsx src/start.ts",
-    "evaluate": "tsx scripts/evaluate.ts"
+    "evaluate": "tsx scripts/evaluate.ts",
+    "connect": "tsx scripts/connect.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "0.133.0",

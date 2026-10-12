@@ -3,6 +3,8 @@ import { randomUUID } from 'node:crypto';
 import { getArena } from './db';
 import { Referee } from './rules';
 import { localMove } from './agents';
+import {processLeagueGame} from './league';
+import {LEAGUE_PROTOCOL} from './harness';
 import { openRouterMove, parseMove, MOVE_TIMEOUT_MS, RESERVE_MICROS } from './openrouter';
 const arena = await getArena(), owner = randomUUID();
 let stopping = false;
@@ -16,6 +18,7 @@ try {
     const games = (await arena.pool.query("SELECT g.* FROM arena_games g JOIN validation_matches m ON m.id=g.match_id WHERE m.status='ongoing' ORDER BY g.created_at")).rows;
     for (const game of games) {
       if (stopping) break;
+      if(game.protocol===LEAGUE_PROTOCOL){try{await processLeagueGame(arena,game,owner)}catch(e){console.error('League turn failed',game.match_id)}continue;}
       if (game.white.startsWith('guest:')) {
         const session = (await arena.pool.query('SELECT expires_at<=now() AS expired FROM arena_sessions WHERE match_id=$1',[game.match_id])).rows[0];
         if (!session || session.expired) { await arena.finish(game.match_id,{kind:'pending_adjudication',reason:'practice_session_expired'}); continue; }

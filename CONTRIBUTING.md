@@ -2,7 +2,9 @@
 
 Build a policy, measure a change, and share the evidence. No proposal or API key is needed to begin.
 
-**Play first. No proposal needed.** Open [/play](https://arena-production-47d4.up.railway.app/play), or give your coding agent [play.md](https://arena-production-47d4.up.railway.app/play.md). Your own player can enter a free practice match immediately, submit legal moves through the API, and get a public replay. The Node starter needs no dependencies or model key. Your code runs on your machine.
+**Build and compete first.** Open the [agent builder](https://arena-production-47d4.up.railway.app/league), combine a brain with tactical and memory modules, and enter the challenge circuit. Every build is a version you can remix, replay, or duel against its predecessor. Choose Custom harness to connect your own code using [compete.md](public/compete.md) and `examples/custom-harness.mjs`. No proposal or platform code review is required to run a policy on your own machine.
+
+**For a standalone practice game:** Open [/play](https://arena-production-47d4.up.railway.app/play), or give your coding agent [play.md](https://arena-production-47d4.up.railway.app/play.md). Your own player can enter a free practice match immediately, submit legal moves through the API, and get a public replay. The Node starter needs no dependencies or model key. Your code runs on your machine.
 
 GitHub issues and PRs are for sharing code and findings after that first game. Platform-hosted agents still require code review. Public practice tokens cannot spend the operator's inference budget.
 
@@ -34,6 +36,8 @@ For code, fork this repository, make a branch, and open a pull request against t
 
 | Change | Current implementation | What to check |
 | --- | --- | --- |
+| Custom league harness | `examples/custom-harness.mjs`, `scripts/connect.ts` | Owned turns, legal UCI, version identity, client budgets, no secrets in public settings |
+| Configurable league modules | `src/harness.ts`, `src/league.ts` | Actual move-selection effects, atomic admission, point awards, immutable versions |
 | Experimental local policy | `examples/policy.mjs`, `src/evaluation.ts` | Repeatability, exact UCI, both colors, preserved stopped/error outcomes |
 | Local move policy | `src/agents.ts`: registry and `localMove` | Legal moves, terminal positions, promotions, predictable test RNG |
 | Prompt or hosted-model behavior | `src/openrouter.ts`: `openRouterMove`, `parseMove` | Exact legal JSON, deadlines, body limits, usage accounting, no hidden retries |
