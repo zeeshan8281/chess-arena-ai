@@ -6,11 +6,32 @@
 
 A live chess laboratory for language models, local baselines, and community experiments.
 
-[Live arena](https://arena-production-47d4.up.railway.app) · [Contribute](CONTRIBUTING.md) · [Research agenda](research/REPORT.md) · [Propose an agent](https://github.com/zeeshan8281/chess-arena-ai/issues/new?template=agent-proposal.yml) · [Propose research](https://github.com/zeeshan8281/chess-arena-ai/issues/new?template=research-proposal.yml)
+[Live arena](https://arena-production-47d4.up.railway.app) · [Contribute](CONTRIBUTING.md) · [Harness lab](https://arena-production-47d4.up.railway.app/lab) · [Research](research/product-upgrade/REPORT.md)
 
 </div>
 
 ---
+
+## Build → evaluate → improve
+
+- **[Play](https://arena-production-47d4.up.railway.app/play):** give your coding agent one instruction, enter a free practice match, and get a public replay.
+- **[Harness lab](https://arena-production-47d4.up.railway.app/lab):** run a free browser comparison of random and capture-first policies on the same seed/color schedule. Inspect every game and download the evidence.
+- **[Builder’s playbook](https://arena-production-47d4.up.railway.app/contribute):** practical policy experiments and architecture lessons from other agent environments.
+
+Run your own policy without PostgreSQL or a model key:
+
+```sh
+npm ci
+npm run evaluate -- --policy examples/policy.mjs --version my-agent-v1 --out v1.json
+```
+
+Change `examples/policy.mjs`, choose a new version and output path, then compare the reports. `createPolicy()` returns a move selector receiving FEN, history, legal UCI moves and an injected random generator. Each game resets policy memory. The runner plays seeds 17, 43, 97 and 211 in both colors against `seeded-random-v1`, with a 160-ply limit. It records wins, draws, losses, stopped games and errors separately. Every report includes configuration, UCI histories, final FENs and PGNs; custom policies also include the entry file SHA-256. Retain your source commit and lockfile for dependency identity.
+
+The suite is public, small and easy to overfit. It is a regression tool, not a rating, hidden benchmark or automatic learning system. Seeded repeatability depends on using the supplied random generator and avoiding uncontrolled external state. Custom code runs locally without sandboxing or a hard execution timeout. Browser results remain in the tab until downloaded; they are separate from hosted matches.
+
+Match rooms now expose factual move events, material balance, position links, FEN copying and an external Lichess analysis link. These are not engine-generated move-quality labels. Hosted results are separated by recorded protocol and include stopped/ongoing denominators, without ordinal rankings. Matching protocol labels alone do not imply equal opponents or compute.
+
+Read [the evaluation contract](public/lab.md), [contribution guide](CONTRIBUTING.md), and [research behind the product direction](research/product-upgrade/REPORT.md).
 
 ## What is this?
 
@@ -29,7 +50,7 @@ This is an early, unrated research application. Results come from recorded games
 - **Live match room:** server-sent events, reconnect cursors, move history, and replay controls.
 - **Durable records:** moves, results, dispatch attempts, usage, latency, and budget reservations live in PostgreSQL.
 - **Exports:** download PGN, or retrieve the complete JSON match record through the API.
-- **Measured results:** W/D/L and completed-game score; interrupted games do not become wins or draws.
+- **Measured results:** W/D/L, stopped and ongoing counts separated by protocol; interrupted games do not become wins or draws.
 - **Bring your own agent:** no-account public practice API, browser starter, Node starter and agent-readable `play.md`.
 - **Contribution routes:** public contribution page, agent/research issue forms, PR template, and reproducibility guide.
 
@@ -104,7 +125,7 @@ Current extension points are `src/agents.ts` for the registry and local policies
 
 ### Contribute chess research
 
-Open a [research proposal](https://github.com/zeeshan8281/chess-arena-ai/issues/new?template=research-proposal.yml) with a hypothesis, controlled variables, dataset provenance, budget, failure policy, and planned artifacts. Useful starting points:
+Optionally open a [research proposal](https://github.com/zeeshan8281/chess-arena-ai/issues/new?template=research-proposal.yml) with a hypothesis, controlled variables, dataset provenance, budget, failure policy, and planned artifacts. Useful starting points:
 
 | Track | Question | Required evidence |
 |---|---|---|

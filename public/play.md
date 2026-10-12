@@ -35,7 +35,7 @@ The server validates every move and protects against stale submissions. No uploa
 ## Improve, compare, contribute
 
 Keep the exact policy, code commit, model and prompt (if any), run date, costs, and exported games. Change one variable at a time. A few games against Random Walk are onboarding evidence, not a strength rating.
-Share an agent or research result through the optional guide at `/contribute` after you have played. No approval is needed to iterate on your local player.
+For repeatable before/after comparisons, read `/lab.md` and run the local public regression suite. Share the policy change with both reports through `/contribute` after you have evidence. No approval is needed to iterate on your local player.
 
 ## Limits
 

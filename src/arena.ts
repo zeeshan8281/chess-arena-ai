@@ -4,6 +4,7 @@ import { Store, type Lease } from './store';
 import { Referee, type Outcome } from './rules';
 import { isAgent, agentName } from './agents';
 import { RESERVE_MICROS, MATCH_PROTOCOL } from './openrouter';
+import {materialBalance,moveFacts} from './insights';
 
 export const BUDGET_ID = 'b893ff67-f32a-4b80-a821-9e752d895b3a';
 export const BUDGET_MICROS = Math.floor(Number(process.env.ARENA_BUDGET_USD ?? '5') * 1e6);
@@ -110,14 +111,24 @@ export class Arena extends Store {
       FROM validation_accounts WHERE id=$1`,[BUDGET_ID])).rows[0];
     const worker = (await this.pool.query("SELECT heartbeat,heartbeat>now()-interval '10 seconds' AS online FROM arena_worker WHERE id=1")).rows[0];
     const standings = (await this.pool.query(`SELECT g.white,g.black,m.result FROM arena_games g JOIN validation_matches m ON m.id=g.match_id WHERE m.status IN ('win','draw')`)).rows;
-    return { games, budget: { ...budget, limit: BUDGET_MICROS }, worker: worker ?? { online:false }, results: standings };
+    const summaries=(await this.pool.query(`SELECT g.protocol,a.agent,
+      count(*)::int AS games,
+      count(*) FILTER(WHERE m.status='win' AND m.result->>'winner'=a.color)::int AS wins,
+      count(*) FILTER(WHERE m.status='draw')::int AS draws,
+      count(*) FILTER(WHERE m.status='win' AND m.result->>'winner'<>a.color)::int AS losses,
+      count(*) FILTER(WHERE m.status NOT IN ('win','draw','ongoing'))::int AS stopped,
+      count(*) FILTER(WHERE m.status='ongoing')::int AS ongoing
+      FROM arena_games g JOIN validation_matches m ON m.id=g.match_id
+      CROSS JOIN LATERAL(VALUES(g.white,'w'),(g.black,'b'))a(agent,color)
+      GROUP BY g.protocol,a.agent ORDER BY g.protocol,a.agent`)).rows;
+    return { games, summaries, budget: { ...budget, limit: BUDGET_MICROS }, worker: worker ?? { online:false }, results: standings };
   }
   async detail(id: string) {
     const g = (await this.pool.query('SELECT * FROM arena_games WHERE match_id=$1',[id])).rows[0];
     if (!g) return null;
     const snapshot = await this.snapshot(id), referee = new Referee(snapshot.initial_fen);
-    const frames = [{ seq:0,fen:referee.chess.fen(),san:'Start',moveUci:'' }];
-    for (const move of snapshot.moves) { referee.play(move); frames.push({seq:frames.length,fen:referee.chess.fen(),san:referee.chess.history().at(-1)!,moveUci:move}); }
+    const frames = [{ seq:0,fen:referee.chess.fen(),san:'Start',moveUci:'',tags:[] as string[],material:materialBalance(referee.chess),captured:null as string|null }];
+    for (const move of snapshot.moves) { referee.play(move); const last=referee.chess.history({verbose:true}).at(-1)!; frames.push({seq:frames.length,fen:referee.chess.fen(),san:last.san,moveUci:move,...moveFacts(last,referee.chess)}); }
     const result = snapshot.result as Outcome;
     for (const [key,value] of Object.entries({White:agentName(g.white),Black:agentName(g.black),Event:'AI Chess Arena · Unrated',Site:'Agent Arena',Result:result.kind==='draw'?'1/2-1/2':result.kind==='win'?(result.winner==='w'?'1-0':'0-1'):'*',Termination:result.reason})) referee.chess.setHeader(key,value);
     const attempts = (await this.pool.query('SELECT version,agent,state,paid,cost_micros::float8,latency_ms,input_tokens,output_tokens,error FROM arena_attempts WHERE match_id=$1 ORDER BY version',[id])).rows;

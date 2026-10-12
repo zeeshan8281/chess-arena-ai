@@ -84,3 +84,17 @@ test('public practice capacity is atomic and names cannot inject agent identifie
  assert.equal(results.filter(r=>r.status==='rejected').length,1);
  for(const r of results)if(r.status==='fulfilled')await arena.finish(r.value.matchId,{kind:'pending_adjudication',reason:'test_finished'});
 });
+
+test('protocol summaries reconcile completed, stopped and ongoing games without mixing tracks',async()=>{
+ const ids=await arena.createGames('local-search','local-random',true);
+ await pool.query("UPDATE arena_games SET protocol='summary-test-v1' WHERE match_id=ANY($1::uuid[])",[ids]);
+ for(const moveUci of ['f2f3','e7e5','g2g4','d8h4']){const lease=(await arena.claim(ids[0],'summary-test'))!;await arena.commitMove(lease,{attemptId:lease.attemptId,moveUci},{elapsedMs:0,limitMs:1000})}
+ let rows=(await arena.list()).summaries.filter(r=>r.protocol==='summary-test-v1');
+ assert.equal(rows.length,2);
+ for(const row of rows){assert.equal(row.games,2);assert.equal(row.ongoing,1);assert.equal(row.wins+row.losses,1);assert.equal(row.stopped,0)}
+ await arena.finish(ids[1],{kind:'pending_adjudication',reason:'ply_limit'});
+ rows=(await arena.list()).summaries.filter(r=>r.protocol==='summary-test-v1');
+ assert.equal(rows.find(r=>r.agent==='local-random').wins,1);
+ for(const row of rows){assert.equal(row.stopped,1);assert.equal(row.draws,0);assert.equal(row.games,row.wins+row.draws+row.losses+row.stopped+row.ongoing)}
+ const detail=await arena.detail(ids[0]);assert.deepEqual(detail!.frames.at(-1)!.tags,['Checkmate']);
+});

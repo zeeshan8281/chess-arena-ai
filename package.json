@@ -11,7 +11,8 @@
     "start": "next start --hostname 127.0.0.1 --port 3217",
     "demo": "tsx src/demo.ts",
     "worker": "tsx src/worker.ts",
-    "start:hosted": "node --import tsx src/start.ts"
+    "start:hosted": "node --import tsx src/start.ts",
+    "evaluate": "tsx scripts/evaluate.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "0.133.0",

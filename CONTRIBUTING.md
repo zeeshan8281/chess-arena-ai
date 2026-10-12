@@ -1,14 +1,25 @@
 # Contribute to AI Chess Arena
 
-Bring a chess-playing idea, or bring evidence about how chess-playing systems behave. You do not need an API key to propose either.
+Build a policy, measure a change, and share the evidence. No proposal or API key is needed to begin.
 
 **Play first. No proposal needed.** Open [/play](https://arena-production-47d4.up.railway.app/play), or give your coding agent [play.md](https://arena-production-47d4.up.railway.app/play.md). Your own player can enter a free practice match immediately, submit legal moves through the API, and get a public replay. The Node starter needs no dependencies or model key. Your code runs on your machine.
 
 GitHub issues and PRs are for sharing code and findings after that first game. Platform-hosted agents still require code review. Public practice tokens cannot spend the operator's inference budget.
 
+## Start with the free regression lab
+
+Open [/lab](https://arena-production-47d4.up.railway.app/lab) for a browser comparison, or run your own policy locally:
+
+```sh
+npm ci
+npm run evaluate -- --policy examples/policy.mjs --version my-agent-v1 --out v1.json
+```
+
+No database or model key is needed for this command. Edit the policy, rerun with a new version and output file, and submit a PR containing the change and both reports. The runner uses four fixed seeds in both colors against a seeded random opponent. It exports UCI moves, PGNs, final positions, configuration, and separate stopped/error outcomes. Custom policy reports contain a SHA-256 of the entry file; also retain your git commit and lockfile to identify dependencies. Read [lab.md](public/lab.md) for the policy contract and limitations. Public cases are for regression, not held-out strength claims.
+
 ## 1. Submit an agent or strategy
 
-[Open an agent proposal](https://github.com/zeeshan8281/chess-arena-ai/issues/new?template=agent-proposal.yml), or [open a general issue](https://github.com/zeeshan8281/chess-arena-ai/issues/new) if the template is unavailable. Include:
+For early discussion, optionally [open an agent proposal](https://github.com/zeeshan8281/chess-arena-ai/issues/new?template=agent-proposal.yml), or [open a general issue](https://github.com/zeeshan8281/chess-arena-ai/issues/new) if the template is unavailable. Include:
 
 - A short name, author, and source/license information.
 - What changes: model, exact prompt, search policy, tool access, or combination.
@@ -23,6 +34,7 @@ For code, fork this repository, make a branch, and open a pull request against t
 
 | Change | Current implementation | What to check |
 | --- | --- | --- |
+| Experimental local policy | `examples/policy.mjs`, `src/evaluation.ts` | Repeatability, exact UCI, both colors, preserved stopped/error outcomes |
 | Local move policy | `src/agents.ts`: registry and `localMove` | Legal moves, terminal positions, promotions, predictable test RNG |
 | Prompt or hosted-model behavior | `src/openrouter.ts`: `openRouterMove`, `parseMove` | Exact legal JSON, deadlines, body limits, usage accounting, no hidden retries |
 | Scheduling or turn execution | `src/worker.ts` | Lease ownership, cancellation, failure records, restart behavior |
@@ -34,7 +46,7 @@ Adding a registry entry alone is insufficient for a new execution mechanism: `sr
 
 ## 2. Contribute a reproducible chess study
 
-[Open a research proposal](https://github.com/zeeshan8281/chess-arena-ai/issues/new?template=research-proposal.yml). Start with one testable question, for example: “Does showing legal moves reduce invalid outputs?” or “Does a prompt change improve performance at the same token budget?”
+You can optionally [open a research proposal](https://github.com/zeeshan8281/chess-arena-ai/issues/new?template=research-proposal.yml). Start with one testable question, for example: “Does showing legal moves reduce invalid outputs?” or “Does a prompt change improve performance at the same token budget?”
 
 Include the hypothesis, baseline, exact input positions/openings, both-color schedule, sample size, exclusion rules, and measurements before running the experiment. Separate wins/draws/losses from invalid replies, timeouts, cancellations, and move-limit stops. A stopped game is not a draw.
 
@@ -46,7 +58,7 @@ An evidence PR should contain a short report plus the data and instructions need
 - Analysis code, environment/setup instructions, completed-game and failure counts, and uncertainty estimates where justified.
 - Limitations, contrary observations, and a clear distinction between findings and hypotheses.
 
-Read [the research agenda](research/REPORT.md) before choosing a first study. Those study designs are proposals. Existing game exports do not by themselves capture every item in a reproducibility bundle, and the current random baseline is not a seeded experiment runner.
+Read [the research agenda](research/REPORT.md) before choosing a first study. Those study designs are proposals. Existing game exports do not by themselves capture every item in a reproducibility bundle, and hosted practice remains separate from the deterministic public regression runner in `src/evaluation.ts`.
 
 ## Local development and checks
 
