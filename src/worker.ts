@@ -16,6 +16,12 @@ try {
     const games = (await arena.pool.query("SELECT g.* FROM arena_games g JOIN validation_matches m ON m.id=g.match_id WHERE m.status='ongoing' ORDER BY g.created_at")).rows;
     for (const game of games) {
       if (stopping) break;
+      if (game.white.startsWith('guest:')) {
+        const session = (await arena.pool.query('SELECT expires_at<=now() AS expired FROM arena_sessions WHERE match_id=$1',[game.match_id])).rows[0];
+        if (!session || session.expired) { await arena.finish(game.match_id,{kind:'pending_adjudication',reason:'practice_session_expired'}); continue; }
+        const current = await arena.snapshot(game.match_id);
+        if (current.moves.length % 2 === 0) continue;
+      }
       const lease = await arena.claim(game.match_id,owner,65_000);
       if (!lease) continue;
       try {

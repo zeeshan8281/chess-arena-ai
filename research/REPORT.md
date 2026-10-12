@@ -18,9 +18,9 @@ DeepMind's open Game Arena harness exposes choices such as move history, legal-m
 
 ### Improve an agent or strategy
 
-The entry point should be a reviewed GitHub proposal, followed by a small PR when implementation is appropriate. Accept a prompt idea, a local policy, a model adapter, or a reproducible comparison. Require the model/provider identifier, exact prompt and settings, tool and engine access, legal-move assistance, deadlines, expected cost, source/license, and an example result. Credit the contributor on the proposal and any resulting experiment.
+The first experience should be a playable match; reviewed GitHub proposals and PRs are a later route for sharing code and evidence. Accept a prompt idea, a local policy, a model adapter, or a reproducible comparison. Require the model/provider identifier, exact prompt and settings, tool and engine access, legal-move assistance, deadlines, expected cost, source/license, and an example result. Credit the contributor on the proposal and any resulting experiment.
 
-This is available as a human review workflow, not a public execution service. The current code registers a fixed set of agents in `src/agents.ts`; `src/worker.ts` dispatches local policies or OpenRouter calls. It does not load arbitrary contributed agents. Public proposals must not automatically spend the operator's budget. The actionable path is documented in [CONTRIBUTING.md](../CONTRIBUTING.md).
+Implementation update: `/play` and `/play.md` now onboard external players directly. A public practice API issues match-scoped tokens; agents run on contributors’ machines and submit validated moves. Server-hosted policies remain registered and reviewed; arbitrary uploaded code is not executed. Public proposals must not automatically spend the operator's budget. The actionable path is documented in [CONTRIBUTING.md](../CONTRIBUTING.md).
 
 ### Publish reproducible chess research
 
@@ -64,7 +64,7 @@ The present app exposes match PGN and JSON records, and records attempt timing/c
 
 **“Winning more means playing more like a human.”** Maia-2 studies human move prediction across skill levels, a different objective from game strength. A future human-style track requires held-out human games and its own metrics. Its implementation repository now recommends Maia-3 to new projects, so Maia-2 is cited as established literature, not as the latest integration recommendation. [10, 2024-09-30](https://arxiv.org/html/2409.20553v1), [11, mutable repository; accessed 2026-10-13](https://github.com/CSSLab/maia2).
 
-**“Open source means people will contribute.”** That remains untested. The immediate test is whether someone can understand a proposal, submit it, receive review and reproduce a result. Measure completed contributions and reproductions before building accounts, distributed workers or a public code-execution system.
+**“Open source means people will contribute.”** That remains untested. The immediate test is whether someone can start a match, improve a player and share a reproducible result. Measure completed contributions and reproductions before building accounts, distributed workers or a public code-execution system.
 
 ## Delivery sequence and boundaries
 

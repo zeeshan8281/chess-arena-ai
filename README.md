@@ -30,9 +30,33 @@ This is an early, unrated research application. Results come from recorded games
 - **Durable records:** moves, results, dispatch attempts, usage, latency, and budget reservations live in PostgreSQL.
 - **Exports:** download PGN, or retrieve the complete JSON match record through the API.
 - **Measured results:** W/D/L and completed-game score; interrupted games do not become wins or draws.
+- **Bring your own agent:** no-account public practice API, browser starter, Node starter and agent-readable `play.md`.
 - **Contribution routes:** public contribution page, agent/research issue forms, PR template, and reproducibility guide.
 
 The historical `/replay` route remains an explicitly labeled seven-ply scripted fixture. It is separate from the live arena and does not enter its results.
+
+## Get your agent playing — no setup on our server
+
+Open [Bring your agent](https://arena-production-47d4.up.railway.app/play), copy the instruction into your coding agent, and get a public watch link. Or click **Run starter agent** to see the complete loop in your browser.
+
+Your coding agent can read [play.md](https://arena-production-47d4.up.railway.app/play.md), download the dependency-free [Node starter](public/starter.mjs), and run:
+
+```sh
+node starter.mjs "My agent"
+```
+
+Change `chooseMove(turn)` to your own policy. It receives FEN, UCI history and legal moves. The public API creates a match-scoped player token and lets your agent submit moves against Random Walk. No account, GitHub proposal, operator token or paid model key is needed. Your code runs on your computer; every game has a persisted public replay and PGN/JSON exports.
+
+The browser starter uses a capture-first policy; the Node starter chooses random legal moves. Both are explicitly local algorithms. Practice sessions last up to 30 minutes and 160 plies, with 12 concurrent sessions and 200 starts per day globally for this pilot. Practice uses no hosted inference budget. Keep player tokens private.
+
+| Endpoint | Purpose |
+| --- | --- |
+| `POST /api/play` | Create a practice session with `{name}` |
+| `GET /api/play` | Fetch your current turn with a Bearer player token |
+| `POST /api/play/move` | Submit `{version, moveUci}` with that token |
+| `DELETE /api/play` | Stop your own session; JSON body `{}` |
+
+Full protocol and error handling: [play.md](public/play.md). Public practice uses `community-uci-v1`; hosted model matches use `legal-choice-v2`.
 
 ## Run locally
 
@@ -74,7 +98,7 @@ Local bots make no paid inference calls. Model games require a funded OpenRouter
 
 ### Build an agent or strategy
 
-Start with an [agent proposal](https://github.com/zeeshan8281/chess-arena-ai/issues/new?template=agent-proposal.yml). Explain the model or algorithm, exact prompt, allowed tools, expected cost, and reproduction steps. Then fork the repository and submit a tested pull request.
+First play through `/play` or `play.md`. When you are ready to share code, open an [agent proposal](https://github.com/zeeshan8281/chess-arena-ai/issues/new?template=agent-proposal.yml). Explain the model or algorithm, exact prompt, allowed tools, expected cost, and reproduction steps. Then fork the repository and submit a tested pull request.
 
 Current extension points are `src/agents.ts` for the registry and local policies, `src/openrouter.ts` for the model protocol, and `src/worker.ts` for dispatch. These are reviewed code contributions; uploading a proposal does **not** automatically execute arbitrary code or grant a ranking.
 

@@ -52,3 +52,35 @@ test('queue capacity is serialized and color pairs are atomically swapped',async
  const active=(await pool.query("SELECT id FROM validation_matches WHERE status='ongoing'")).rows;
  assert.equal(active.length,4);for(const row of active)await arena.finish(row.id,{kind:'pending_adjudication',reason:'test_finished'});
 });
+
+test('public practice uses private match-scoped tokens, legal versioned moves, and no paid budget',async()=>{
+ const {createPractice,practiceTurn,practiceMove,stopPractice}=await import('../src/community');
+ const before=(await arena.list()).budget;
+ const a=await createPractice(arena,{name:'Test player'}),b=await createPractice(arena,{name:'Other player'});
+ assert.equal(a.token.length,64);assert.notEqual(a.token,b.token);
+ assert.ok(!(JSON.stringify(await arena.detail(a.matchId))).includes(a.token));
+ await assert.rejects(practiceTurn(arena,'bad-token'),/Invalid player token/);
+ const turn=await practiceTurn(arena,a.token);assert.equal(turn.yourTurn,true);assert.equal(turn.legalMoves.length,20);
+ await assert.rejects(practiceMove(arena,a.token,{version:0,moveUci:'e2e5'}),/Illegal move/);
+ const attempts=await Promise.allSettled([practiceMove(arena,a.token,{version:0,moveUci:'e2e4'}),practiceMove(arena,a.token,{version:0,moveUci:'d2d4'})]);
+ assert.equal(attempts.filter(a=>a.status==='fulfilled').length,1);
+ assert.equal((await arena.snapshot(a.matchId)).moves.length,1);
+ assert.equal((await arena.snapshot(b.matchId)).moves.length,0);
+ assert.equal((await practiceTurn(arena,a.token)).yourTurn,false);
+ assert.deepEqual((await arena.list()).budget,before);
+ const lease=(await arena.claim(a.matchId,'test-opponent'))!;
+ await arena.commitMove(lease,{attemptId:lease.attemptId,moveUci:'e7e5'},{elapsedMs:0,limitMs:1000});
+ assert.equal((await practiceTurn(arena,a.token)).yourTurn,true);
+ await pool.query("UPDATE arena_sessions SET expires_at=now()-interval '1 second' WHERE match_id=$1",[a.matchId]);
+ await assert.rejects(practiceMove(arena,a.token,{version:2,moveUci:'g1f3'}),/expired/);
+ await stopPractice(arena,b.token);assert.equal((await arena.detail(b.matchId))!.result.reason,'cancelled_by_player');
+ for(const id of [a.matchId,b.matchId])await arena.finish(id,{kind:'pending_adjudication',reason:'test_finished'});
+});
+test('public practice capacity is atomic and names cannot inject agent identifiers',async()=>{
+ const {createPractice}=await import('../src/community');
+ await assert.rejects(createPractice(arena,{name:'guest:pretend'}));
+ const results=await Promise.allSettled(Array.from({length:13},(_,i)=>createPractice(arena,{name:'Capacity '+i})));
+ assert.equal(results.filter(r=>r.status==='fulfilled').length,12);
+ assert.equal(results.filter(r=>r.status==='rejected').length,1);
+ for(const r of results)if(r.status==='fulfilled')await arena.finish(r.value.matchId,{kind:'pending_adjudication',reason:'test_finished'});
+});

@@ -40,3 +40,11 @@ test('mutation guard rejects cross-origin and unauthenticated remote requests',(
    }});
   }
  });
+
+test('public play accepts forwarded same-host origins and rejects cross-site or oversized input',async()=>{
+ const {playBody}=await import('../src/play-http');
+ const request=(origin:string,body='{}')=>new Request('http://localhost:8080/api/play',{method:'POST',headers:{host:'arena.example',origin,'Content-Type':'application/json'},body});
+ assert.deepEqual(await playBody(request('https://arena.example')),{});
+ await assert.rejects(playBody(request('https://other.example')),/Use this site/);
+ await assert.rejects(playBody(request('https://arena.example','x'.repeat(1025))),/too large/);
+});

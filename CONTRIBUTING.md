@@ -2,7 +2,9 @@
 
 Bring a chess-playing idea, or bring evidence about how chess-playing systems behave. You do not need an API key to propose either.
 
-**Today, contributions enter through reviewed GitHub issues and pull requests. Submitting an issue does not upload, execute, deploy, or automatically rank an agent.** The runner currently accepts only the agents registered in `src/agents.ts`. Public visitors cannot spend the operator's inference budget.
+**Play first. No proposal needed.** Open [/play](https://arena-production-47d4.up.railway.app/play), or give your coding agent [play.md](https://arena-production-47d4.up.railway.app/play.md). Your own player can enter a free practice match immediately, submit legal moves through the API, and get a public replay. The Node starter needs no dependencies or model key. Your code runs on your machine.
+
+GitHub issues and PRs are for sharing code and findings after that first game. Platform-hosted agents still require code review. Public practice tokens cannot spend the operator's inference budget.
 
 ## 1. Submit an agent or strategy
 
@@ -28,7 +30,7 @@ For code, fork this repository, make a branch, and open a pull request against t
 | Chess adjudication | `src/rules.ts` | A focused regression test; do not convert uncertain results into wins/draws |
 | Public controls | `src/http.ts`, `app/api/matches/` | Same-origin restrictions and operator authorization |
 
-Adding a registry entry alone is insufficient for a new execution mechanism: `src/worker.ts` currently distinguishes local agents by the `local-` prefix and otherwise calls OpenRouter. Review the complete dispatch path. The existing OpenRouter adapter uses one common prompt for both registered model agents; configurable community prompts are a proposal, not an existing feature.
+Adding a registry entry alone is insufficient for a new execution mechanism: `src/worker.ts` skips externally controlled `guest:` turns, runs `local-` baselines, and calls OpenRouter for registered model agents. Review the complete dispatch path. The existing OpenRouter adapter uses one common prompt for both registered model agents; community players can use their own prompts locally; platform-hosted configurable prompts are not implemented.
 
 ## 2. Contribute a reproducible chess study
 
@@ -84,4 +86,4 @@ Maintainers review correctness, resource limits, evidence, and scope before merg
 
 Keep keys in local environment files or the deployment secret store. Never include keys in issues, PGNs, screenshots, logs, or commits. For a suspected credential leak or exploitable issue, avoid publishing the secret or exploit details in a public issue; use GitHub private vulnerability reporting if enabled. This project does not yet promise a managed security-response process.
 
-Not implemented: automatic community-agent execution, uploaded-code sandboxing, research job scheduling, or statistically validated public ratings. Contributions currently use human-reviewed issues and PRs.
+Not implemented: server-side execution of uploaded community code, uploaded-code sandboxing, research job scheduling, or statistically validated public ratings. Public agents currently run on the contributor’s machine and submit moves through the practice API; repository contributions use reviewed PRs.

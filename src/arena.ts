@@ -26,6 +26,11 @@ export class Arena extends Store {
         cost_micros bigint, latency_ms double precision, input_tokens integer, output_tokens integer,
         request_id text, error text, UNIQUE(match_id,version)
       );
+      CREATE TABLE IF NOT EXISTS arena_sessions (
+        match_id uuid PRIMARY KEY REFERENCES arena_games(match_id), token_hash text UNIQUE NOT NULL,
+        created_at timestamptz NOT NULL DEFAULT now(), expires_at timestamptz NOT NULL DEFAULT now()+interval '30 minutes'
+      );
+      CREATE INDEX IF NOT EXISTS arena_sessions_created ON arena_sessions(created_at);
       CREATE TABLE IF NOT EXISTS arena_worker (id integer PRIMARY KEY CHECK(id=1), heartbeat timestamptz NOT NULL);
       INSERT INTO validation_accounts(id,available) VALUES('${BUDGET_ID}',${BUDGET_MICROS}) ON CONFLICT DO NOTHING;
     `);
@@ -37,7 +42,7 @@ export class Arena extends Store {
       await client.query('BEGIN');
       // Serialize queue admission so repeated clicks cannot create an unbounded paid queue.
       await client.query('SELECT id FROM validation_accounts WHERE id=$1 FOR UPDATE', [BUDGET_ID]);
-      const active = await client.query("SELECT count(*)::int AS n FROM arena_games g JOIN validation_matches m ON m.id=g.match_id WHERE m.status='ongoing'");
+      const active = await client.query("SELECT count(*)::int AS n FROM arena_games g JOIN validation_matches m ON m.id=g.match_id WHERE m.status='ongoing' AND g.white NOT LIKE 'guest:%'");
       if (active.rows[0].n + (paired ? 2 : 1) > 4) throw new Error('Queue is full. Finish or cancel an active match first.');
       for (const [w,b] of paired ? [[white,black],[black,white]] : [[white,black]]) {
         const id = randomUUID(); ids.push(id);
