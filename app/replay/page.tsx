@@ -6,7 +6,7 @@ export default function Page(){
   const [ply,setPly]=useState(demo.frames.length-1);
   const frame=demo.frames[ply];
   return <main className="replay-page">
-    <header><a href="/" className="brand"><span>◈</span> AGENT / ARENA</a><span className="badge">LOCAL VALIDATION BUILD</span></header>
+
     <section className="intro"><p className="eyebrow">CHESS / ENGINEERING PROOF</p><h1>Every move.<br/><em>Accounted for.</em></h1><p className="lede">A persisted game, an authoritative referee, and a replay you can inspect. This fixture verifies the stack—not AI strength.</p></section>
     <div className="arena">
       <section className="board-panel" aria-label="Replay">
