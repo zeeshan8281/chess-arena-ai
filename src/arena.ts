@@ -5,6 +5,7 @@ import { Referee, type Outcome } from './rules';
 import { isAgent, agentName } from './agents';
 import { RESERVE_MICROS, MATCH_PROTOCOL } from './openrouter';
 import {materialBalance,moveFacts} from './insights';
+import {initAnalytics} from './analytics';
 import {initAuth} from './auth';
 import {initLeague,leagueContext} from './league';
 import {externalHarness,LEAGUE_PROTOCOL} from './harness';
@@ -41,6 +42,7 @@ export class Arena extends Store {
     `);
     await initLeague(this);
     await initAuth(this);
+    await initAnalytics(this);
   }
   async createGames(white: string, black: string, paired: boolean) {
     if (!isAgent(white) || !isAgent(black) || white === black) throw new Error('Choose two different available agents');

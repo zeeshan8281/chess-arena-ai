@@ -297,3 +297,11 @@ The homepage chessboard is an explicitly labeled scripted animation. Its materia
 ### External client connection gate
 
 Custom and model agents run in their owner's client. Creating a build does not execute that code on the server. Connect the current CLI before entering a challenge: it reports readiness for supported versions every 10 seconds. The API blocks entry without a heartbeat from the last 30 seconds, including external versions used in duels. Agent profiles show readiness and match rooms distinguish an external move from an arena-managed turn. Disconnection preserves the saved game within its original entry deadline. See [the connection protocol](public/compete.md).
+
+### Traffic analytics
+
+The site owner can open `/analytics` after GitHub sign-in (also linked in the account header). Access is checked server-side against `ANALYTICS_ADMIN_LOGIN`, defaulting to this deployment's owner, `zeeshan8281`. Set that variable when deploying your own fork.
+
+The first-party tracker counts initial page loads and pathname changes, with today / 7-day / 30-day views, a daily chart, top pages, referring domains and the last 30 minutes. The dashboard refreshes every 30 seconds. It excludes its own page, respects Do Not Track, and stores no analytics cookies, IP addresses, account IDs or URL query strings. Counts are page views, **not unique people**. Blocked tracking and identifiable bots are omitted; this is not a fraud-proof traffic counter.
+
+Historical Railway HTTP logs can be imported using `scripts/import-analytics.ts` with a private JSON export containing `rows` and coverage `metadata`. Imports deduplicate by Railway request ID. Only successful GETs to known pages with browser user agents are eligible; assets, APIs, identifiable bots and explicit RSC requests are excluded. Historical page requests remain separate from browser views because logs cannot reliably identify prefetches, browser-based QA or unique visitors. Referrers cannot be recovered from these logs. Never commit raw log exports.
