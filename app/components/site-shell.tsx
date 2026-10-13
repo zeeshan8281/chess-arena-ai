@@ -10,6 +10,7 @@ const items=[
  {href:'/league#build',label:'Build an agent',icon:'M12 4v16 M4 12h16'},
  {href:'/lab',label:'Harness lab',icon:'M9 3h6 M10 3v7L4 20h16l-6-10V3 M7 15h10'},
  {href:'/play',label:'Practice',icon:'M8 3h8v5l-2 3 4 9H6l4-9-2-3z M6 21h12'},
+ {href:'/referrals',label:'Invite builders',icon:'M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2 M9 3a4 4 0 1 0 0 8 4 4 0 0 0 0-8 M20 8v6 M17 11h6'},
  {href:'/contribute',label:'Builder’s playbook',icon:'M12 5c-3-2-6-2-9-1v15c3-1 6-1 9 1 3-2 6-2 9-1V4c-3-1-6-1-9 1z M12 5v15'},
 ];
 export default function SiteShell({children}:{children:React.ReactNode}){

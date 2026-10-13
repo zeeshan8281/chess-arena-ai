@@ -8,7 +8,7 @@ export async function GET(request:Request){const base=origin();try{
  const grant=await response.json();if(!response.ok||typeof grant.access_token!=='string')throw Error();
  const identity=await fetch('https://api.github.com/user',{headers:{Authorization:`Bearer ${grant.access_token}`,Accept:'application/vnd.github+json','User-Agent':'ChessArena'},signal:AbortSignal.timeout(15000)}),user=await identity.json();
  if(!identity.ok||!Number.isSafeInteger(user.id)||typeof user.login!=='string')throw Error();
- const token=await createSession(arena,{id:String(user.id),login:user.login}),headers=new Headers({Location:base+flow.next_path,'Cache-Control':'no-store'});headers.append('Set-Cookie',setCookie(SESSION_COOKIE,token,604800));headers.append('Set-Cookie',setCookie(STATE_COOKIE,'',0));
+ const token=await createSession(arena,{id:String(user.id),login:user.login},flow.referral_code),headers=new Headers({Location:base+flow.next_path,'Cache-Control':'no-store'});headers.append('Set-Cookie',setCookie(SESSION_COOKIE,token,604800));headers.append('Set-Cookie',setCookie(STATE_COOKIE,'',0));headers.append('Set-Cookie',setCookie('arena_referral','',0));
  return new Response(null,{status:302,headers});
  }catch{return new Response(null,{status:302,headers:{Location:base+'/login?error=callback','Set-Cookie':setCookie(STATE_COOKIE,'',0),'Cache-Control':'no-store'}})}
 }

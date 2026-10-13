@@ -30,11 +30,25 @@ test('legacy agents require GitHub linking; session and client ownership cannot 
  const otherSession=await createSession(arena,{id:'other',login:'other'});await assert.rejects(requireAgent(arena,request(otherSession),a.id),/ownership/);
 });
 test('OAuth state is consumed once and expired state is rejected',async()=>{
- await pool.query("INSERT INTO auth_flows VALUES($1,'verifier','/league',now()+interval '1 minute')",[digest('state')]);assert.equal((await consumeFlow(arena,'state')).verifier,'verifier');assert.equal(await consumeFlow(arena,'state'),undefined);
- await pool.query("INSERT INTO auth_flows VALUES($1,'verifier','/league',now()-interval '1 minute')",[digest('expired')]);assert.equal(await consumeFlow(arena,'expired'),undefined);
+ await pool.query("INSERT INTO auth_flows(state_hash,verifier,next_path,expires_at) VALUES($1,'verifier','/league',now()+interval '1 minute')",[digest('state')]);assert.equal((await consumeFlow(arena,'state')).verifier,'verifier');assert.equal(await consumeFlow(arena,'state'),undefined);
+ await pool.query("INSERT INTO auth_flows(state_hash,verifier,next_path,expires_at) VALUES($1,'verifier','/league',now()-interval '1 minute')",[digest('expired')]);assert.equal(await consumeFlow(arena,'expired'),undefined);
 });
 test('cross-origin writes and external return URLs are rejected',()=>{
  assert.throws(()=>sameOrigin(new Request('https://chessarena.fun/api/league',{headers:{origin:'https://attacker.example'}})),/arena site/);
  assert.throws(()=>sameOrigin(new Request('https://chessarena.fun/api/league')),/arena site/);
  sameOrigin(request(''));assert.equal(safeNext('//attacker.example'),'/league');assert.equal(safeNext('/\\attacker.example'),'/league');assert.equal(safeNext('https://attacker.example'),'/league');assert.equal(safeNext('/league#build'),'/league#build');
+});
+test('referrals credit new GitHub users once, preserve the original inviter, and count activated builders',async()=>{
+ const {referralStats}=await import('../src/referrals');
+ const inviter={id:'invite-a',login:'inviter-a'},other={id:'invite-b',login:'inviter-b'},newcomer={id:'invite-new',login:'newcomer'};
+ await createSession(arena,inviter);await createSession(arena,other);
+ const a=await referralStats(arena,inviter.id),b=await referralStats(arena,other.id);assert.equal(a.code,(await referralStats(arena,inviter.id)).code);
+ await Promise.all([createSession(arena,newcomer,a.code),createSession(arena,newcomer,a.code)]);
+ await createSession(arena,newcomer,b.code);await createSession(arena,inviter,a.code);await createSession(arena,other,a.code);
+ assert.equal((await referralStats(arena,inviter.id)).signups,1);assert.equal((await referralStats(arena,other.id)).signups,0);
+ assert.equal((await referralStats(arena,inviter.id)).builders,0);
+ await createAgent(arena,'Referred Builder',Harness.parse({brain:'random',label:'first'}),newcomer.id);
+ await createAgent(arena,'Second Build',Harness.parse({brain:'random',label:'first'}),newcomer.id);
+ assert.equal((await referralStats(arena,inviter.id)).builders,1);
+ await createSession(arena,{id:'bad-ref',login:'invalid'},'invalid');assert.equal((await referralStats(arena,inviter.id)).signups,1);
 });
