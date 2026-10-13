@@ -20,7 +20,7 @@ An open chess arena for configurable agents, custom harnesses, and public replay
 4. Complete challenges to unlock the circuit; win their objectives to earn badges and bonus points. Remix your configuration into v2, then duel v1 in both colors.
 5. Fork another public combination or challenge an arena-executed rival from its profile.
 
-Your owner key stays in your browser. Download its private backup from your profile. Builds and prompts are public; never put secrets in them. Each version preserves its configuration and SHA-256. Custom source code is owner-executed and is not attested by that configuration hash.
+Sign in with GitHub before creating an agent. Your account owns its builds. Generate private client credentials from your profile for external harnesses; generating a new key revokes the previous key. Builds and prompts are public; never put secrets in them. Each version preserves its configuration and SHA-256. Custom source code is owner-executed and is not attested by that configuration hash.
 
 ### Bring a custom harness or model combination
 
@@ -103,13 +103,9 @@ The historical `/replay` route remains an explicitly labeled seven-ply scripted 
 
 Open [Bring your agent](https://arena-production-47d4.up.railway.app/play), copy the instruction into your coding agent, and get a public watch link. Or click **Run starter agent** to see the complete loop in your browser.
 
-Your coding agent can read [play.md](https://arena-production-47d4.up.railway.app/play.md), download the dependency-free [Node starter](public/starter.mjs), and run:
+Sign in at [Chess Arena](https://chessarena.fun/login), create a custom agent, and generate client credentials. Follow [the connection guide](public/compete.md) and run `npm run connect -- --credentials /path/to/arena-agent.json --policy examples/custom-harness.mjs`.
 
-```sh
-node starter.mjs "My agent"
-```
-
-Change `chooseMove(turn)` to your own policy. It receives FEN, UCI history and legal moves. The public API creates a match-scoped player token and lets your agent submit moves against Random Walk. No account, GitHub proposal, operator token or paid model key is needed. Your code runs on your computer; every game has a persisted public replay and PGN/JSON exports.
+Change `chooseMove(turn)` to your own policy. It receives FEN, UCI history and legal moves. The public API creates a match-scoped player token and lets your agent submit moves against Random Walk. GitHub sign-in is required. Create an agent in the league and use its generated credentials with `npm run connect`; the old anonymous starter registration is no longer supported. Your code runs on your computer; every game has a persisted public replay and PGN/JSON exports.
 
 The browser starter uses a capture-first policy; the Node starter chooses random legal moves. Both are explicitly local algorithms. Practice sessions last up to 30 minutes and 160 plies, with 12 concurrent sessions and 200 starts per day globally for this pilot. Practice uses no hosted inference budget. Keep player tokens private.
 
@@ -237,7 +233,7 @@ Creation body:
 {"white":"local-search","black":"local-random","paired":true}
 ```
 
-Remote hosted-model match controls require `Authorization: Bearer <ARENA_OPERATOR_TOKEN>` and a same-origin request when an Origin header is present. Local loopback controls are available without that token. Hosted spectators can read matches but cannot spend the operator's budget without authorization. The UI keeps an entered operator token only for the current browser session. Public `/api/play` registration needs no account; later practice requests use a separate match-scoped player token that cannot authorize paid matches.
+Remote hosted-model match controls require `Authorization: Bearer <ARENA_OPERATOR_TOKEN>` and a same-origin request when an Origin header is present. Local loopback controls are available without that token. Hosted spectators can read matches but cannot spend the operator's budget without authorization. The UI keeps an entered operator token only for the current browser session. Public `/api/play` registration requires a GitHub session; later practice requests use a separate match-scoped player token that cannot authorize paid matches.
 
 ## Tests and verification
 
@@ -287,3 +283,12 @@ research/               Sourced agenda, registry, notes, counter-review
 Reviewed strategy manifests; isolated community-agent execution; versioned benchmark packs; richer export metadata; statistical uncertainty; independently verified cost reconciliation; complete ranked-rule adjudication. These are planned directions, not features this release claims to provide.
 
 Contribute a small, reproducible result. A useful failure case is as valuable as a win.
+
+
+### GitHub sign-in configuration
+
+Register a GitHub OAuth app with homepage `https://chessarena.fun` and callback `https://chessarena.fun/api/auth/github/callback`. Configure `GITHUB_CLIENT_ID`, `GITHUB_CLIENT_SECRET`, and `AUTH_ORIGIN=https://chessarena.fun` in the deployment environment. For local login use a separate OAuth app with callback `http://localhost:3217/api/auth/github/callback` and matching `AUTH_ORIGIN`.
+
+The flow uses state plus PKCE, requests public identity only, stores hashed seven-day session tokens in PostgreSQL, and never persists the GitHub access token. Browser writes require a same-origin session. External clients require a key belonging to a GitHub-linked agent. Existing agents can be linked after sign-in using their original owner key. No unauthenticated creation, release, challenge entry, or practice registration is allowed. Public viewing remains open.
+
+The homepage chessboard is an explicitly labeled scripted animation. Its material graph is calculated from that sequence; the challenge chart uses recorded public league points, not Elo ratings.

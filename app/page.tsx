@@ -1,1 +1,1 @@
-export {default} from './league/page';
+export {default} from './home';

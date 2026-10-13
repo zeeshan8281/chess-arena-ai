@@ -5,6 +5,7 @@ import { Referee, type Outcome } from './rules';
 import { isAgent, agentName } from './agents';
 import { RESERVE_MICROS, MATCH_PROTOCOL } from './openrouter';
 import {materialBalance,moveFacts} from './insights';
+import {initAuth} from './auth';
 import {initLeague} from './league';
 
 export const BUDGET_ID = 'b893ff67-f32a-4b80-a821-9e752d895b3a';
@@ -37,6 +38,7 @@ export class Arena extends Store {
       INSERT INTO validation_accounts(id,available) VALUES('${BUDGET_ID}',${BUDGET_MICROS}) ON CONFLICT DO NOTHING;
     `);
     await initLeague(this);
+    await initAuth(this);
   }
   async createGames(white: string, black: string, paired: boolean) {
     if (!isAgent(white) || !isAgent(black) || white === black) throw new Error('Choose two different available agents');

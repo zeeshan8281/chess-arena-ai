@@ -9,10 +9,10 @@ const hash=(s:string)=>createHash('sha256').update(s).digest('hex');
 const uuid=z.string().uuid();
 export const LeagueAction=z.discriminatedUnion('action',[
  z.object({action:z.literal('create'),name:z.string().trim().min(2).max(30).regex(/^[a-zA-Z0-9 _.-]+$/),config:Harness}).strict(),
- z.object({action:z.literal('release'),config:Harness}).strict(),
- z.object({action:z.literal('enter'),versionId:uuid,challenge:z.enum(['rookie','tactics','rival','duel']),opponentId:uuid.optional()}).strict(),
- z.object({action:z.literal('move'),matchId:uuid,version:z.number().int().nonnegative(),moveUci:z.string().regex(/^[a-h][1-8][a-h][1-8][qrbn]?$/)}).strict(),
- z.object({action:z.literal('cancel'),runId:uuid}).strict(),
+ z.object({action:z.literal('release'),agentId:uuid.optional(),config:Harness}).strict(),
+ z.object({action:z.literal('enter'),agentId:uuid.optional(),versionId:uuid,challenge:z.enum(['rookie','tactics','rival','duel']),opponentId:uuid.optional()}).strict(),
+ z.object({action:z.literal('move'),agentId:uuid.optional(),matchId:uuid,version:z.number().int().nonnegative(),moveUci:z.string().regex(/^[a-h][1-8][a-h][1-8][qrbn]?$/)}).strict(),
+ z.object({action:z.literal('cancel'),agentId:uuid.optional(),runId:uuid}).strict(),
 ]);
 export async function initLeague(arena:Arena){await arena.pool.query(`
  SELECT pg_advisory_xact_lock(773310);
@@ -40,10 +40,10 @@ export async function profile(arena:Arena,id:string){
  return {...agent,versions,runs,progress:progress(runs)};
 }
 export async function directory(arena:Arena){const rows=(await arena.pool.query('SELECT id FROM league_agents ORDER BY created_at DESC LIMIT 60')).rows;const profiles=[];for(const row of rows){const p=await profile(arena,row.id);profiles.push({id:p.id,name:p.name,created_at:p.created_at,versions:p.versions.length,latest:p.versions[0],progress:p.progress})}return {agents:profiles.sort((a,b)=>b.progress.points-a.progress.points),challenges:CHALLENGES,protocol:LEAGUE_PROTOCOL}}
-export async function createAgent(arena:Arena,name:string,config:HarnessConfig){
+export async function createAgent(arena:Arena,name:string,config:HarnessConfig,githubId?:string){
  const id=randomUUID(),versionId=randomUUID(),token=randomBytes(32).toString('hex'),client=await arena.pool.connect();
  try{await client.query('BEGIN');await client.query('SELECT pg_advisory_xact_lock(773311)');if((await client.query("SELECT count(*)::int n FROM league_agents WHERE created_at>now()-interval '1 day'")).rows[0].n>=100)throw new PlayError('Daily builder capacity reached. Try again tomorrow.',429);
- await client.query('INSERT INTO league_agents(id,name,token_hash) VALUES($1,$2,$3)',[id,name,hash(token)]);
+ await client.query('INSERT INTO league_agents(id,name,token_hash,github_id) VALUES($1,$2,$3,$4)',[id,name,hash(token),githubId??null]);
  await client.query('INSERT INTO league_versions(id,agent_id,number,config,config_hash) VALUES($1,$2,1,$3,$4)',[versionId,id,config,hash(JSON.stringify(config))]);await client.query('COMMIT');return {id,token,versionId};
  }catch(e){await client.query('ROLLBACK');throw e}finally{client.release()}
 }
