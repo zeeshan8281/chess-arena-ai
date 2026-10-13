@@ -1,3 +1,4 @@
+import {connectionReady} from './connections';
 import {randomUUID,randomBytes,createHash} from 'node:crypto';
 import {DEFAULT_POSITION} from 'chess.js';
 import {z} from 'zod';
@@ -8,6 +9,7 @@ import {Harness,CHALLENGES,NPC,LEAGUE_PROTOCOL,externalHarness,harnessMove,type 
 const hash=(s:string)=>createHash('sha256').update(s).digest('hex');
 const uuid=z.string().uuid();
 export const LeagueAction=z.discriminatedUnion('action',[
+ z.object({action:z.literal('connect'),versionIds:z.array(uuid).min(1).max(40)}).strict(),
  z.object({action:z.literal('create'),name:z.string().trim().min(2).max(30).regex(/^[a-zA-Z0-9 _.-]+$/),config:Harness}).strict(),
  z.object({action:z.literal('release'),agentId:uuid.optional(),config:Harness}).strict(),
  z.object({action:z.literal('enter'),agentId:uuid.optional(),versionId:uuid,challenge:z.enum(['rookie','tactics','rival','duel']),opponentId:uuid.optional()}).strict(),
@@ -20,6 +22,7 @@ export async function initLeague(arena:Arena){await arena.pool.query(`
  CREATE TABLE IF NOT EXISTS league_versions(id uuid PRIMARY KEY,agent_id uuid NOT NULL REFERENCES league_agents(id),number integer NOT NULL,config jsonb NOT NULL,config_hash text NOT NULL,created_at timestamptz NOT NULL DEFAULT now(),UNIQUE(agent_id,number));
  CREATE TABLE IF NOT EXISTS league_runs(id uuid PRIMARY KEY,agent_id uuid NOT NULL REFERENCES league_agents(id),version_id uuid NOT NULL REFERENCES league_versions(id),challenge text NOT NULL,opponent_id uuid REFERENCES league_versions(id),created_at timestamptz NOT NULL DEFAULT now());
  CREATE TABLE IF NOT EXISTS league_games(match_id uuid PRIMARY KEY REFERENCES arena_games(match_id),run_id uuid NOT NULL REFERENCES league_runs(id),color text NOT NULL,seed integer NOT NULL);
+ CREATE TABLE IF NOT EXISTS league_connections(version_id uuid PRIMARY KEY REFERENCES league_versions(id),token_hash text NOT NULL,seen_at timestamptz NOT NULL);
  CREATE INDEX IF NOT EXISTS league_versions_agent ON league_versions(agent_id);
  CREATE INDEX IF NOT EXISTS league_runs_agent ON league_runs(agent_id);
  CREATE INDEX IF NOT EXISTS league_games_run ON league_games(run_id);
@@ -37,7 +40,8 @@ export async function profile(arena:Arena,id:string){
  const runs=(await arena.pool.query(`SELECT r.*,v.number AS version_number,v.config->>'label' AS version_label,ov.config->>'label' AS opponent_label FROM league_runs r JOIN league_versions v ON v.id=r.version_id LEFT JOIN league_versions ov ON ov.id=r.opponent_id WHERE r.agent_id=$1 ORDER BY r.created_at DESC`,[id])).rows;
  const games=(await arena.pool.query(`SELECT lg.*,m.status,m.result,jsonb_array_length(m.moves) AS plies,g.white,g.black FROM league_games lg JOIN league_runs r ON r.id=lg.run_id JOIN validation_matches m ON m.id=lg.match_id JOIN arena_games g ON g.match_id=lg.match_id WHERE r.agent_id=$1 ORDER BY lg.color DESC`,[id])).rows;
  for(const run of runs)run.games=games.filter(g=>g.run_id===run.id);
- return {...agent,versions,runs,progress:progress(runs)};
+ const connections=(await arena.pool.query("SELECT c.version_id FROM league_connections c JOIN league_versions v ON v.id=c.version_id JOIN league_agents a ON a.id=v.agent_id WHERE a.id=$1 AND c.token_hash=a.token_hash AND c.seen_at>now()-interval '30 seconds'",[id])).rows.map(r=>r.version_id);
+ return {...agent,versions,runs,connections,progress:progress(runs)};
 }
 export async function directory(arena:Arena){const rows=(await arena.pool.query('SELECT id FROM league_agents ORDER BY created_at DESC LIMIT 60')).rows;const profiles=[];for(const row of rows){const p=await profile(arena,row.id);profiles.push({id:p.id,name:p.name,created_at:p.created_at,versions:p.versions.length,latest:p.versions[0],progress:p.progress})}return {agents:profiles.sort((a,b)=>b.progress.points-a.progress.points),challenges:CHALLENGES,protocol:LEAGUE_PROTOCOL}}
 export async function createAgent(arena:Arena,name:string,config:HarnessConfig,githubId?:string){
@@ -55,6 +59,7 @@ export async function enter(arena:Arena,agentId:string,versionId:string,challeng
  let opponent:any=null;if(challenge==='duel'){if(!opponentId||opponentId===versionId)throw new PlayError('Choose a different opponent version.');opponent=(await arena.pool.query('SELECT v.*,a.name FROM league_versions v JOIN league_agents a ON a.id=v.agent_id WHERE v.id=$1',[opponentId])).rows[0];if(!opponent)throw new PlayError('Opponent not found',404);if(externalHarness(opponent.config)&&opponent.agent_id!==agentId)throw new PlayError('External rivals must connect themselves; choose a server-run rival.');}else if(!mission)throw new PlayError('Unknown challenge');
  const client=await arena.pool.connect(),runId=randomUUID(),ids:string[]=[];
  try{await client.query('BEGIN');await client.query('SELECT pg_advisory_xact_lock(773312)');
+ for(const build of [version,opponent])if(build&&externalHarness(build.config)&&!await connectionReady(arena,build.id))throw new PlayError('Connect the external client for this build before entering. Open Connect your harness on the agent profile.',409);
  const count=(await client.query(`SELECT count(*) FILTER(WHERE m.status='ongoing')::int active,count(*) FILTER(WHERE r.agent_id=$1 AND m.status='ongoing')::int owned,count(*) FILTER(WHERE r.created_at>now()-interval '1 day')::int daily FROM league_runs r JOIN league_games lg ON lg.run_id=r.id JOIN validation_matches m ON m.id=lg.match_id`,[agentId])).rows[0];
  if(count.active+2>12||count.owned>0||count.daily+2>400)throw new PlayError('Finish your active challenge or wait for a league slot.',429);
  await client.query('INSERT INTO league_runs(id,agent_id,version_id,challenge,opponent_id) VALUES($1,$2,$3,$4,$5)',[runId,agentId,versionId,challenge,opponentId??null]);

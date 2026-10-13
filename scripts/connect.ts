@@ -17,10 +17,12 @@ if(module&&typeof module.createHarness!=='function')throw Error('Custom module m
 const brains=new Map<string,(turn:any)=>Promise<string>|string>();
 const headers={'Content-Type':'application/json',Authorization:`Bearer ${credentials.token}`};
 async function api(path:string,body?:unknown){const r=await fetch(new URL(path,base),{method:body?'POST':'GET',headers,body:body?JSON.stringify(body):undefined,signal:AbortSignal.timeout(15_000)});const d=await r.json();if(!r.ok)throw Error(`Arena ${r.status}: ${d.error}`);return d}
-console.log(`Connected. Enter a challenge at ${base.origin}/agents/${credentials.agentId}. Press Ctrl+C to disconnect.`);
+console.log(`Checking client readiness. Enter a challenge at ${base.origin}/agents/${credentials.agentId}. Press Ctrl+C to disconnect.`);
 const lockPath=credentialsPath+'.lock';let lock;try{lock=await open(lockPath,'wx',0o600)}catch{throw Error('Another connection may be active. Stop it before reconnecting. A stale .lock file may be removed only after confirming the old process is gone.')}
+let heartbeatTimer:ReturnType<typeof setInterval>|undefined,heartbeatBusy=false;
+async function ready(){if(heartbeatBusy)return;heartbeatBusy=true;try{const p=await api('/api/league?agent='+encodeURIComponent(credentials.agentId));const versionIds=[];for(const v of p.versions){const config=Harness.parse(v.config);if(config.brain==='custom'&&module){const choose=module.createHarness(config);if(typeof choose!=='function')throw Error('createHarness must return a move function');versionIds.push(v.id)}if(config.brain==='model'&&process.env.OPENROUTER_API_KEY&&ledger.spent+ledger.reserved+RESERVE_MICROS<=budget*1e6)versionIds.push(v.id)}if(!versionIds.length)throw Error('No runnable external builds. Custom builds need --policy; model builds need OPENROUTER_API_KEY and --budget.');await api('/api/league',{action:'connect',versionIds});}finally{heartbeatBusy=false}}
 let stopping=false;process.on('SIGINT',()=>{stopping=true});process.on('SIGTERM',()=>{stopping=true});
-try{try{ledger=JSON.parse(await readFile(ledgerPath,'utf8'));if(!Number.isFinite(ledger.reserved)||!Number.isFinite(ledger.spent)||ledger.reserved<0||ledger.spent<0)throw Error('Invalid spend ledger')}catch(e){if((e as NodeJS.ErrnoException).code!=='ENOENT')throw e;}while(!stopping){
+try{try{ledger=JSON.parse(await readFile(ledgerPath,'utf8'));if(!Number.isFinite(ledger.reserved)||!Number.isFinite(ledger.spent)||ledger.reserved<0||ledger.spent<0)throw Error('Invalid spend ledger')}catch(e){if((e as NodeJS.ErrnoException).code!=='ENOENT')throw e;}await ready();console.log('Client ready. Challenge entry is enabled for supported builds.');heartbeatTimer=setInterval(()=>{void ready().catch(e=>console.error('Readiness heartbeat failed:',e.message))},10000);while(!stopping){
  const {turns}=await api('/api/league?turns=1');
  for(const turn of turns){if(stopping)break;const config:HarnessConfig=Harness.parse(turn.config),candidates=harnessCandidates(turn,config,turn.seed+turn.historyUci.length*7919);let moveUci:string;
   if(config.brain==='model'){
@@ -43,4 +45,4 @@ try{try{ledger=JSON.parse(await readFile(ledgerPath,'utf8'));if(!Number.isFinite
  }
  await new Promise(r=>setTimeout(r,1000));
 }
-}finally{await lock.close();await unlink(lockPath)}
+}finally{if(heartbeatTimer)clearInterval(heartbeatTimer);await lock.close();await unlink(lockPath)}

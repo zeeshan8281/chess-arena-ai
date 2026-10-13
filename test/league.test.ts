@@ -1,3 +1,4 @@
+import {connectVersions} from '../src/connections';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import pg from 'pg';
@@ -39,7 +40,7 @@ test('mate-only circuit respects side to move, earns one-time rewards, and does 
  assert.equal((await profile(arena,a.id)).progress.points,300);
 });
 test('external harness owns only its current turns; cannot move for another agent or past the cap',async()=>{
- const a=await createAgent(arena,'External',Harness.parse({...base,brain:'custom'})),b=await createAgent(arena,'Stranger',base),run=await enter(arena,a.id,a.versionId,'rookie');
+ const a=await createAgent(arena,'External',Harness.parse({...base,brain:'custom'})),b=await createAgent(arena,'Stranger',base);await connectVersions(arena,a.id,[a.versionId]);const run=await enter(arena,a.id,a.versionId,'rookie');
  const before=(await arena.list()).budget;
  const turns=await activeTurns(arena,a.id);assert.equal(turns.length,1);await assert.rejects(leagueMove(arena,b.id,{matchId:turns[0].matchId,version:0,moveUci:'e2e4'}),/owned/);
  await assert.rejects(leagueMove(arena,a.id,{matchId:turns[0].matchId,version:0,moveUci:'e2e5'}),/Illegal/);
@@ -63,4 +64,23 @@ test('composed modules affect actual choices and remain deterministic legal poli
 test('model builds send their custom prompt while keeping bounded legal JSON and no retries',async()=>{
  const {openRouterMove}=await import('../src/openrouter');let requests=0;
  const result=await openRouterMove('openai/gpt-4.1-mini',{fen:new Referee().chess.fen(),historyUci:[],legalMoves:['e2e4','d2d4']},{apiKey:'test-only',systemPrompt:'Prefer central pawns.',fetch:(async(_url:any,init:any)=>{requests++;const body=JSON.parse(init.body);assert.ok(body.messages[0].content.startsWith('Prefer central pawns.'));assert.deepEqual(body.response_format.json_schema.schema.properties.moveUci.enum,['e2e4','d2d4']);assert.equal(body.provider.allow_fallbacks,false);return new Response(JSON.stringify({choices:[{message:{content:'{"moveUci":"e2e4"}'},finish_reason:'stop'}],usage:{cost:0}}))}) as typeof fetch});assert.equal(requests,1);assert.equal(result.costMicros,0);
+});
+test('external entry requires a current version-specific client; disconnection preserves active games',async()=>{
+ const a=await createAgent(arena,'Connection Gate',Harness.parse({...base,brain:'custom'}));
+ await assert.rejects(enter(arena,a.id,a.versionId,'rookie'),/Connect the external client/);
+ assert.equal((await profile(arena,a.id)).runs.length,0);
+ const managed=await release(arena,a.id,{...base,brain:'search',label:'Managed rival test'});await assert.rejects(enter(arena,a.id,managed.versionId,'duel',a.versionId),/Connect the external client/);
+ await assert.rejects(connectVersions(arena,randomUUID(),[a.versionId]),/owned/);
+ await connectVersions(arena,a.id,[a.versionId]);
+ const newer=await release(arena,a.id,{...base,brain:'custom',label:'New external build'});
+ await assert.rejects(enter(arena,a.id,newer.versionId,'rookie'),/Connect the external client/);
+ await pool.query("UPDATE league_connections SET seen_at=now()-interval '31 seconds' WHERE version_id=$1",[a.versionId]);
+ await assert.rejects(enter(arena,a.id,a.versionId,'rookie'),/Connect the external client/);
+ await connectVersions(arena,a.id,[a.versionId]);const run=await enter(arena,a.id,a.versionId,'rookie');
+ const white=run.ids[0];let detail=await arena.detail(white);assert.equal(detail!.execution!.external,true);assert.equal(detail!.execution!.clientConnected,true);
+ await pool.query("UPDATE league_connections SET seen_at=now()-interval '31 seconds' WHERE version_id=$1",[a.versionId]);
+ detail=await arena.detail(white);assert.equal(detail!.execution!.clientConnected,false);await tick(white);assert.equal((await arena.snapshot(white)).status,'ongoing');
+ const turn=(await activeTurns(arena,a.id)).find(t=>t.matchId===white)!;await leagueMove(arena,a.id,{matchId:white,version:turn.version,moveUci:'e2e4'});assert.equal((await arena.snapshot(white)).moves.length,1);assert.equal((await arena.detail(white))!.execution!.external,false);
+ await cancelRun(arena,a.id,run.runId);
+ await pool.query("UPDATE league_agents SET token_hash=$2 WHERE id=$1",[a.id,'rotated-'+a.id]);await assert.rejects(enter(arena,a.id,a.versionId,'rookie'),/Connect the external client/);
 });

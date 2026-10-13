@@ -12,13 +12,14 @@ export async function GET(request:Request,context:{params:Promise<{id:string}>})
   const encoder = new TextEncoder(); let closed = false;
   const stream = new ReadableStream({
     async start(controller) {
-      let cursor = Number(cursorText), sent = false;
+      let cursor = Number(cursorText), sent = false, signature='';
       try {
         const until = Date.now()+55_000;
         while (!closed && !request.signal.aborted && Date.now()<until) {
           const game = await arena.detail(id);
           if (!game || closed || request.signal.aborted) break;
-          if (!sent || game.cursor>cursor) { controller.enqueue(encoder.encode(`id: ${game.cursor}\ndata: ${JSON.stringify(game)}\n\n`)); cursor=game.cursor; sent=true; }
+          const nextSignature=JSON.stringify([game.status,game.execution]);
+          if (!sent || game.cursor>cursor || signature!==nextSignature) { controller.enqueue(encoder.encode(`id: ${game.cursor}\ndata: ${JSON.stringify(game)}\n\n`)); cursor=game.cursor; sent=true;signature=nextSignature; }
           else controller.enqueue(encoder.encode(': heartbeat\n\n'));
           if (game.status!=='ongoing') break;
           await new Promise(resolve=>setTimeout(resolve,1000));

@@ -1,3 +1,4 @@
+import {connectVersions} from '../../../src/connections';
 import {sessionUser,requireUser,requireAgent,sameOrigin} from '../../../src/auth';
 import {z} from 'zod';
 import {getArena} from '../../../src/db';
@@ -12,7 +13,8 @@ export async function POST(request:Request){try{
  const reader=request.body?.getReader();let bytes=0;const chunks:Uint8Array[]=[];try{while(reader){const {done,value}=await reader.read();if(done)break;bytes+=value.byteLength;if(bytes>8192)throw new PlayError('Request too large',413);chunks.push(value)}}finally{await reader?.cancel().catch(()=>{});reader?.releaseLock()}const text=Buffer.concat(chunks).toString('utf8');let raw;try{raw=JSON.parse(text)}catch{throw new PlayError('Invalid JSON')}
  const body=LeagueAction.parse(raw),arena=await getArena();
  if(body.action==='create'){sameOrigin(request);const user=await requireUser(arena,request);return Response.json(await createAgent(arena,body.name,body.config,user.id),{status:201})}
- const agent=await requireAgent(arena,request,body.agentId);
+ const agent=await requireAgent(arena,request,'agentId' in body?body.agentId:undefined);
+ if(body.action==='connect'){if(!request.headers.get('authorization')?.startsWith('Bearer '))throw new PlayError('Connect using your private client credentials.',401);return Response.json(await connectVersions(arena,agent.id,body.versionIds))}
  if(body.action==='release')return Response.json(await release(arena,agent.id,body.config),{status:201});
  if(body.action==='enter'){if(!(await arena.list()).worker.online)throw new PlayError('The league worker is starting. Try again shortly.',503);return Response.json(await enter(arena,agent.id,body.versionId,body.challenge,body.opponentId),{status:201})}
  if(body.action==='move')return Response.json(await leagueMove(arena,agent.id,body));

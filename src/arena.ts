@@ -6,7 +6,9 @@ import { isAgent, agentName } from './agents';
 import { RESERVE_MICROS, MATCH_PROTOCOL } from './openrouter';
 import {materialBalance,moveFacts} from './insights';
 import {initAuth} from './auth';
-import {initLeague} from './league';
+import {initLeague,leagueContext} from './league';
+import {externalHarness,LEAGUE_PROTOCOL} from './harness';
+import {connectionReady} from './connections';
 
 export const BUDGET_ID = 'b893ff67-f32a-4b80-a821-9e752d895b3a';
 export const BUDGET_MICROS = Math.floor(Number(process.env.ARENA_BUDGET_USD ?? '5') * 1e6);
@@ -136,6 +138,8 @@ export class Arena extends Store {
     const result = snapshot.result as Outcome;
     for (const [key,value] of Object.entries({White:agentName(g.white),Black:agentName(g.black),Event:'AI Chess Arena · Unrated',Site:'Agent Arena',Result:result.kind==='draw'?'1/2-1/2':result.kind==='win'?(result.winner==='w'?'1-0':'0-1'):'*',Termination:result.reason})) referee.chess.setHeader(key,value);
     const attempts = (await this.pool.query('SELECT version,agent,state,paid,cost_micros::float8,latency_ms,input_tokens,output_tokens,error FROM arena_attempts WHERE match_id=$1 ORDER BY version',[id])).rows;
-    return { ...g,...snapshot,frames,attempts,pgn:referee.chess.pgn(),rankEligible:false };
+    let execution=null;
+    if(g.protocol===LEAGUE_PROTOCOL){const ctx=await leagueContext(this,id);if(ctx){const primary=referee.chess.turn()===ctx.color,config=primary?ctx.config:ctx.opponent_config;const external=Boolean(config&&externalHarness(config));execution={external,agentId:primary?ctx.agent_id:ctx.opponent_agent_id,clientConnected:external?await connectionReady(this,primary?ctx.version_id:ctx.opponent_id):false,expiresAt:new Date(new Date(ctx.created_at).getTime()+1800000).toISOString()}}}
+    return { ...g,...snapshot,frames,attempts,execution,pgn:referee.chess.pgn(),rankEligible:false };
   }
 }
