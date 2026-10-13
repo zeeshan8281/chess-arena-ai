@@ -2,7 +2,7 @@ import {createHash} from 'node:crypto';
 import {getArena} from '../../../../src/db';
 import {secret,digest,origin,safeNext,setCookie,STATE_COOKIE} from '../../../../src/auth';
 export async function GET(request:Request){
- const base=origin();if(new URL(request.url).origin!==base)return Response.redirect(base+'/api/auth/github?next='+encodeURIComponent(safeNext(new URL(request.url).searchParams.get('next'))));
+ const base=origin();if(request.headers.get('host')!==new URL(base).host)return Response.redirect(base+'/api/auth/github?next='+encodeURIComponent(safeNext(new URL(request.url).searchParams.get('next'))));
  if(!process.env.GITHUB_CLIENT_ID||!process.env.GITHUB_CLIENT_SECRET)return Response.redirect(base+'/login?error=setup');
  const arena=await getArena(),state=secret(),verifier=secret(),next=safeNext(new URL(request.url).searchParams.get('next'));
  await arena.pool.query('DELETE FROM auth_flows WHERE expires_at<now()');
