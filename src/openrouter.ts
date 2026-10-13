@@ -17,7 +17,7 @@ export async function openRouterMove(model: string, turn: { fen: string; legalMo
     { role: 'user', content: JSON.stringify(turn) },
   ];
   const body = JSON.stringify({model, messages, max_tokens:1024, stream:false,
-    ...(model.startsWith('google/gemini-') ? {reasoning:{enabled:false}} : {}),
+    ...(model.startsWith('google/gemini-4-argon') ? {reasoning:{effort:'low'}} : model.startsWith('google/gemini-') ? {reasoning:{enabled:false}} : {}),
     response_format:{type:'json_schema',json_schema:{name:'chess_move',strict:true,schema:{type:'object',properties:{moveUci:{type:'string',enum:turn.legalMoves}},required:['moveUci'],additionalProperties:false}}},
     provider:{allow_fallbacks:false,require_parameters:true,max_price:{prompt:2,completion:10,request:0}},
   });
