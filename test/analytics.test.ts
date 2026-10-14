@@ -27,6 +27,6 @@ test('views deduplicate delivery and historical imports stay separate and idempo
  const row={requestId:randomUUID(),timestamp:new Date().toISOString(),method:'GET',httpStatus:200,path:'/',clientUa:'Mozilla/5.0'};
  assert.equal(historicalPageview({...row,path:'/api/matches'}),null);assert.equal(historicalPageview({...row,clientUa:'Googlebot'}),null);assert.equal(historicalPageview({...row,path:'/league?_rsc=abc'}),null);assert.equal(historicalPageview({...row,httpStatus:404}),null);
  await importHistory(arena,[row,row],{from:row.timestamp,to:row.timestamp,deployments:1});await importHistory(arena,[row],{from:row.timestamp,to:row.timestamp,deployments:1});
- const stats=await analyticsStats(arena,7);assert.equal(stats.views,1);assert.equal(stats.historical,1);assert.equal(stats.today,1);assert.equal(stats.recent,1);assert.equal(stats.referrers[0].referrer,'github.com');assert.equal(stats.history.requests,1);
+ const stats=await analyticsStats(arena,7);assert.equal(stats.activity.length,1);assert.equal(stats.activity[0].path,'/league');assert.equal(stats.views,1);assert.equal(stats.historical,1);assert.equal(stats.today,1);assert.equal(stats.recent,1);assert.equal(stats.referrers[0].referrer,'github.com');assert.equal(stats.history.requests,1);
  await pool.query("UPDATE arena_pageviews SET created_at=now()-interval '8 days' WHERE source='railway'");assert.equal((await analyticsStats(arena,7)).historical,0);assert.equal((await analyticsStats(arena,30)).historical,1);
 });
