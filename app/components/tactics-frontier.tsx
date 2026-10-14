@@ -16,10 +16,10 @@ export default function TacticsFrontier({rows,onSelect}:{rows:Row[];onSelect:(id
  const labelY=new Map(labels.map(r=>{const pos=Math.max(y(r),previous+48);previous=pos;return [r.id,pos]}));
  const format=(n:number)=>metric==='cost'?'$'+n.toFixed(5):n.toFixed(2)+'s';
  return <div className="tactics-frontier">
-  <div className="tf-heading"><div><p className="eyebrow">PERFORMANCE / EFFICIENCY</p><h3>Find the <mark>frontier.</mark></h3><p>Accuracy, cost, and time. Every tradeoff visible.</p></div><div className="tf-switch" role="group" aria-label="Performance graph axis">{(['cost','latency'] as const).map(m=><button key={m} aria-pressed={metric===m} onClick={()=>setMetric(m)}>{m==='cost'?'API cost':'Latency'}</button>)}</div></div>
+  <div className="tf-heading"><div><h3>Performance frontier</h3><p>Accuracy against cost and response time.</p></div><div className="tf-switch" role="group" aria-label="Performance graph axis">{(['cost','latency'] as const).map(m=><button key={m} aria-pressed={metric===m} onClick={()=>setMetric(m)}>{m==='cost'?'API cost':'Latency'}</button>)}</div></div>
   <p className="tf-legend"><span/> Dotted line: observed Pareto frontier · Higher and further left is better</p>
   <div className="tf-scroll" tabIndex={0} aria-label="Performance graph; scroll horizontally on smaller screens">
-  <svg className="tf-chart" viewBox="0 0 1000 620" role="img" aria-label={`First-move accuracy versus ${metric==='cost'?'mean reported API cost per position':'median response time'}, with a Pareto frontier`}>
+  <svg className="tf-chart" viewBox="0 60 1000 550" role="img" aria-label={`First-move accuracy versus ${metric==='cost'?'mean reported API cost per position':'median response time'}, with a Pareto frontier`}>
    {[0,20,40,60,80].map(t=><g key={t}><line x1="80" x2="620" y1={490-t*5} y2={490-t*5} stroke="#dedfd5" strokeDasharray="3 6"/><text x="65" y={495-t*5} textAnchor="end" className="tf-tick">{t}%</text></g>)}
    {[0,1,2,3,4].map(t=><g key={t}><text x={80+t*135} y="520" textAnchor="middle" className="tf-tick">{format(max*t/4)}</text></g>)}
    <path d="M80 90V490H620" fill="none" stroke="#a5aa9c"/>

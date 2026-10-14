@@ -3,3 +3,7 @@
 .tactics-detail>.tactics-caption{flex-basis:100%;margin:0}
 
 .tactics-budget{font:10px/1.8 monospace;color:#6c765f;background:#eeefe5;padding:12px 14px;border-radius:3px}
+
+/* Compact report framing: keep the measured results above the fold. */
+.tactics-report{margin:22px 0;padding:22px 24px}.tactics-heading{gap:18px;align-items:center}.tactics-heading .eyebrow{font-size:9px;letter-spacing:1.5px;margin:0 0 8px}.tactics-heading h2{font:32px/1.15 Georgia,serif;letter-spacing:-1px;margin:0 0 7px}.tactics-heading p:last-child{font:12px/1.5 Arial,sans-serif;color:#68725e;margin:0}.tactics-stamp{padding:0;gap:5px}.tactics-stamp strong{font:30px/1 Georgia,serif}.tactics-stamp span{font-size:8px;letter-spacing:.6px}.tactics-intro{font-size:12px;line-height:1.6;margin:16px 0 12px;max-width:850px}.tactics-budget{font-size:9px;padding:8px 10px;margin:0}.tactics-toolbar{padding:12px 0;margin:18px 0}.tactics-axis{margin:18px 0 12px}.tactics-result{padding:14px 0}.tactics-score strong{font-size:20px}
+@media(max-width:600px){.tactics-report{margin:16px 0;padding:18px 14px}.tactics-heading h2{font-size:27px}.tactics-heading p:last-child{font-size:12px}.tactics-intro{margin:12px 0;font-size:11px}.tactics-budget{font-size:8px;line-height:1.6}.tactics-name strong{font-size:12px}}
