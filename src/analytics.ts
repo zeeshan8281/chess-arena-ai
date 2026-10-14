@@ -19,14 +19,15 @@ export function parsePageview(body:unknown){const input=Event.parse(body),path=p
 export async function recordPageview(arena:Arena,body:unknown){const e=parsePageview(body);await arena.pool.query("INSERT INTO arena_pageviews(id,path,referrer,source) VALUES($1,$2,$3,'browser') ON CONFLICT DO NOTHING",[e.id,e.path,e.referrer])}
 export async function analyticsStats(arena:Arena,days:number){
  const since=new Date();since.setUTCHours(0,0,0,0);since.setUTCDate(since.getUTCDate()-days+1);
- const [totals,daily,pages,referrers,imports,activity]=await Promise.all([
+ const [totals,daily,pages,referrers,imports,activity,allTime]=await Promise.all([
  arena.pool.query(`SELECT count(*) FILTER(WHERE source='browser')::int AS views,count(*) FILTER(WHERE source='railway')::int AS historical,count(*) FILTER(WHERE source='browser' AND created_at>=date_trunc('day',now() AT TIME ZONE 'UTC') AT TIME ZONE 'UTC')::int AS today,count(*) FILTER(WHERE source='browser' AND created_at>now()-interval '30 minutes')::int AS recent FROM arena_pageviews WHERE created_at >= $1`,[since]),
  arena.pool.query(`SELECT to_char(created_at AT TIME ZONE 'UTC','YYYY-MM-DD') AS day,count(*) FILTER(WHERE source='browser')::int AS views,count(*) FILTER(WHERE source='railway')::int AS historical FROM arena_pageviews WHERE created_at >= $1 GROUP BY 1 ORDER BY 1`,[since]),
  arena.pool.query(`SELECT path,count(*) FILTER(WHERE source='browser')::int AS views,count(*) FILTER(WHERE source='railway')::int AS historical FROM arena_pageviews WHERE created_at >= $1 GROUP BY path ORDER BY count(*) DESC LIMIT 50`,[since]),
  arena.pool.query(`SELECT referrer,count(*)::int AS views FROM arena_pageviews WHERE created_at >= $1 AND source='browser' GROUP BY referrer ORDER BY count(*) DESC LIMIT 20`,[since]),
  arena.pool.query('SELECT metadata,imported_at FROM arena_analytics_imports ORDER BY imported_at DESC LIMIT 1'),
- arena.pool.query("SELECT path,referrer,created_at AS time FROM arena_pageviews WHERE source='browser' AND created_at >= $1 ORDER BY created_at DESC LIMIT 20",[since])]);
- return {...totals.rows[0],activity:activity.rows,daily:daily.rows,pages:pages.rows,referrers:referrers.rows,history:imports.rows[0]?.metadata??null,days,updatedAt:new Date().toISOString()};
+ arena.pool.query("SELECT path,referrer,created_at AS time FROM arena_pageviews WHERE source='browser' AND created_at >= $1 ORDER BY created_at DESC LIMIT 20",[since]),
+ arena.pool.query("SELECT count(*)::int AS total FROM arena_pageviews")]);
+ return {...totals.rows[0],totalViews:allTime.rows[0].total,activity:activity.rows,daily:daily.rows,pages:pages.rows,referrers:referrers.rows,history:imports.rows[0]?.metadata??null,days,updatedAt:new Date().toISOString()};
 }
 export type HistoricalRequest={requestId:string;timestamp:string;method:string;path:string;httpStatus:number;clientUa?:string};
 export function historicalPageview(row:HistoricalRequest){
