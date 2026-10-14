@@ -4,7 +4,7 @@ import {requireUser,type User} from './auth';
 import {PlayError} from './community';
 export const pagePath=(value:string)=>{
  const path=value.split(/[?#]/)[0].replace(/\/$/,'')||'/';
- return /^(\/|\/(watch|league|lab|play|replay|contribute|referrals|login)|\/(agents|matches)\/[a-f0-9-]{36})$/.test(path)?path:null;
+ return /^(\/|\/(watch|league|lab|play|replay|contribute|referrals|login|benchmarks)|\/(agents|matches)\/[a-f0-9-]{36})$/.test(path)?path:null;
 };
 export const isAnalyticsAdmin=(user:User|null)=>Boolean(user&&user.login.toLowerCase()===(process.env.ANALYTICS_ADMIN_LOGIN??'zeeshan8281').toLowerCase());
 export async function requireAnalyticsAdmin(arena:Arena,request:Request){const user=await requireUser(arena,request);if(!isAnalyticsAdmin(user))throw new PlayError('Analytics is restricted to the site owner.',403);return user}

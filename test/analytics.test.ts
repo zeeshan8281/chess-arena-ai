@@ -12,6 +12,7 @@ test.before(async()=>{await admin.query(`CREATE SCHEMA ${schema}`);await arena.i
 test.after(async()=>{await pool.end();await admin.query(`DROP SCHEMA ${schema} CASCADE`);await admin.end()});
 test('tracking strips private URL values and rejects non-page paths',()=>{
  const e=parsePageview({id:randomUUID(),path:'/league?token=secret#build',referrer:'https://example.com/private?token=secret'});assert.equal(e.path,'/league');assert.equal(e.referrer,'example.com');
+ assert.equal(parsePageview({id:randomUUID(),path:'/benchmarks?source=x'}).path,'/benchmarks');
  assert.throws(()=>parsePageview({id:randomUUID(),path:'/api/auth/github/callback'}));assert.throws(()=>parsePageview({id:randomUUID(),path:'/analytics'}));
  assert.equal(parsePageview({id:randomUUID(),path:'/',referrer:'https://chessarena.fun/play'}).referrer,'Direct / unknown');
 });
