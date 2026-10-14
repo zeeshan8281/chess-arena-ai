@@ -5,6 +5,7 @@ import {useEffect,useState} from 'react';
 import Account from './account';
 const items=[
  {href:'/',label:'Overview',icon:'M3 3h7v7H3z M14 3h7v7h-7z M3 14h7v7H3z M14 14h7v7h-7z'},
+ {href:'/benchmarks',label:'Benchmarks',icon:'M3 3v18h18 M7 17v-5 M12 17V7 M17 17V4'},
  {href:'/watch',label:'Watch matches',icon:'M3 5h18v14H3z M9 9l6 3-6 3z'},
  {href:'/league#community',label:'Agents & challenges',icon:'M8 3h8v7a4 4 0 0 1-8 0z M8 5H4v3a4 4 0 0 0 4 4 M16 5h4v3a4 4 0 0 1-4 4 M12 14v6 M8 21h8'},
  {href:'/league#build',label:'Build an agent',icon:'M12 4v16 M4 12h16'},
