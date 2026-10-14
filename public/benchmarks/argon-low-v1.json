@@ -1,0 +1,1277 @@
+{
+  "suite": {
+    "id": "public-regression-v1",
+    "seeds": [
+      17,
+      43,
+      97,
+      211
+    ],
+    "maxPlies": 160,
+    "initialFen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+    "opponent": "seeded-random-v1",
+    "rules": "arena-referee-v1",
+    "engine": "chess.js@1.4.0"
+  },
+  "policy": "argon-low-v1",
+  "sourceHash": "41e1e6567aa599d8746d6646b6efeae543f29b611500dcc3a77a5742af8407d7",
+  "policySource": "()=>async turn=>{if(blocked||used+RESERVE_MICROS>1e6)throw Error(\"Benchmark budget or provider failure stopped further calls\");used+=RESERVE_MICROS;const started=performance.now();try{const reply=await openRouterMove(\"google/gemini-4-argon\",turn,{apiKey});if(reply.costMicros===null)throw Error(\"Unknown cost\");used+=reply.costMicros-RESERVE_MICROS;const move=parseMove(reply.content,turn.legalMoves);timings.push(performance.now()-started);calls.push({model:reply.model,move,costMicros:reply.costMicros,latencyMs:reply.latencyMs});await writeFile(\"verification/argon-benchmark-spend.json\",JSON.stringify({used,calls},null,2));return move}catch(e){blocked=true;throw e}}",
+  "games": [
+    {
+      "seed": 17,
+      "color": "w",
+      "result": {
+        "kind": "win",
+        "reason": "checkmate",
+        "winner": "w"
+      },
+      "error": null,
+      "attemptedMove": null,
+      "plies": 25,
+      "moves": [
+        "e2e4",
+        "a7a6",
+        "d2d4",
+        "g7g5",
+        "c1g5",
+        "c7c6",
+        "b1c3",
+        "f8h6",
+        "g5h6",
+        "e7e5",
+        "h6g7",
+        "d8a5",
+        "g7h8",
+        "a5d8",
+        "h8e5",
+        "d8h4",
+        "g1f3",
+        "g8h6",
+        "f3h4",
+        "f7f6",
+        "d1h5",
+        "e8d8",
+        "h5h6",
+        "b7b5",
+        "h6f8"
+      ],
+      "finalFen": "rnbk1Q2/3p3p/p1p2p2/1p2B3/3PP2N/2N5/PPP2PPP/R3KB1R b KQ - 1 13",
+      "pgn": "[Event \"public-regression-v1\"]\n[Site \"?\"]\n[Date \"????.??.??\"]\n[Round \"?\"]\n[White \"argon-low-v1\"]\n[Black \"seeded-random-v1\"]\n[Result \"1-0\"]\n[Termination \"checkmate\"]\n[Seed \"17\"]\n\n1. e4 a6 2. d4 g5 3. Bxg5 c6 4. Nc3 Bh6 5. Bxh6 e5 6. Bg7 Qa5 7. Bxh8 Qd8 8. Bxe5 Qh4 9. Nf3 Nh6 10. Nxh4 f6 11. Qh5+ Kd8 12. Qxh6 b5 13. Qf8# 1-0"
+    },
+    {
+      "seed": 17,
+      "color": "b",
+      "result": {
+        "kind": "win",
+        "reason": "checkmate",
+        "winner": "b"
+      },
+      "error": null,
+      "attemptedMove": null,
+      "plies": 52,
+      "moves": [
+        "c2c3",
+        "e7e5",
+        "d1b3",
+        "d7d5",
+        "a2a4",
+        "g8f6",
+        "b3d1",
+        "c7c5",
+        "a1a2",
+        "b8c6",
+        "d2d3",
+        "c8e6",
+        "c1e3",
+        "d5d4",
+        "e3h6",
+        "e6a2",
+        "h6d2",
+        "d8b6",
+        "f2f4",
+        "a2b3",
+        "g2g4",
+        "b3d1",
+        "b2b4",
+        "d1b3",
+        "f4e5",
+        "c6e5",
+        "b4b5",
+        "b3d5",
+        "f1h3",
+        "d5h1",
+        "d2f4",
+        "e5g6",
+        "f4g3",
+        "f8d6",
+        "e2e3",
+        "d6g3",
+        "e1e2",
+        "g3h2",
+        "e2d1",
+        "h2g1",
+        "e3e4",
+        "e8c8",
+        "e4e5",
+        "h1f3",
+        "d1c1",
+        "g1e3",
+        "c1b2",
+        "d4c3",
+        "b2a3",
+        "f3d5",
+        "h3f1",
+        "e3c1"
+      ],
+      "finalFen": "2kr3r/pp3ppp/1q3nn1/1PpbP3/P5P1/K1pP4/8/1Nb2B2 w - - 4 27",
+      "pgn": "[Event \"public-regression-v1\"]\n[Site \"?\"]\n[Date \"????.??.??\"]\n[Round \"?\"]\n[White \"seeded-random-v1\"]\n[Black \"argon-low-v1\"]\n[Result \"0-1\"]\n[Termination \"checkmate\"]\n[Seed \"17\"]\n\n1. c3 e5 2. Qb3 d5 3. a4 Nf6 4. Qd1 c5 5. Ra2 Nc6 6. d3 Be6 7. Be3 d4 8. Bh6 Bxa2 9. Bd2 Qb6 10. f4 Bb3 11. g4 Bxd1 12. b4 Bb3 13. fxe5 Nxe5 14. b5 Bd5 15. Bh3 Bxh1 16. Bf4 Ng6 17. Bg3 Bd6 18. e3 Bxg3+ 19. Ke2 Bxh2 20. Kd1 Bxg1 21. e4 O-O-O 22. e5 Bf3+ 23. Kc1 Be3+ 24. Kb2 dxc3+ 25. Ka3 Bd5 26. Bf1 Bc1# 0-1"
+    },
+    {
+      "seed": 43,
+      "color": "w",
+      "result": {
+        "kind": "win",
+        "reason": "checkmate",
+        "winner": "w"
+      },
+      "error": null,
+      "attemptedMove": null,
+      "plies": 19,
+      "moves": [
+        "e2e4",
+        "a7a5",
+        "d2d4",
+        "b8a6",
+        "g1f3",
+        "b7b5",
+        "f1b5",
+        "g8f6",
+        "e4e5",
+        "a8b8",
+        "e5f6",
+        "h7h6",
+        "f6g7",
+        "a6b4",
+        "g7h8q",
+        "b8b7",
+        "c1h6",
+        "e7e6",
+        "h8f8"
+      ],
+      "finalFen": "2bqkQ2/1rpp1p2/4p2B/pB6/1n1P4/5N2/PPP2PPP/RN1QK2R b KQ - 0 10",
+      "pgn": "[Event \"public-regression-v1\"]\n[Site \"?\"]\n[Date \"????.??.??\"]\n[Round \"?\"]\n[White \"argon-low-v1\"]\n[Black \"seeded-random-v1\"]\n[Result \"1-0\"]\n[Termination \"checkmate\"]\n[Seed \"43\"]\n\n1. e4 a5 2. d4 Na6 3. Nf3 b5 4. Bxb5 Nf6 5. e5 Rb8 6. exf6 h6 7. fxg7 Nb4 8. gxh8=Q Rb7 9. Bxh6 e6 10. Qxf8# 1-0"
+    },
+    {
+      "seed": 43,
+      "color": "b",
+      "result": {
+        "kind": "win",
+        "reason": "checkmate",
+        "winner": "b"
+      },
+      "error": null,
+      "attemptedMove": null,
+      "plies": 50,
+      "moves": [
+        "c2c4",
+        "e7e5",
+        "b2b3",
+        "g8f6",
+        "d2d4",
+        "e5d4",
+        "f2f4",
+        "f8b4",
+        "b1c3",
+        "b4c3",
+        "e1f2",
+        "c3a1",
+        "d1d4",
+        "a1d4",
+        "e2e3",
+        "d4c5",
+        "f2e2",
+        "e8g8",
+        "b3b4",
+        "c5b4",
+        "e2d3",
+        "d7d5",
+        "d3d4",
+        "d5c4",
+        "d4c4",
+        "d8d5",
+        "c4b4",
+        "b8c6",
+        "b4a4",
+        "d5a5",
+        "a4b3",
+        "c8e6",
+        "b3c2",
+        "e6f5",
+        "f1d3",
+        "c6b4",
+        "c2c3",
+        "a5c5",
+        "d3c4",
+        "f6e4",
+        "c3b2",
+        "c5c4",
+        "c1d2",
+        "c4c2",
+        "b2a3",
+        "c2a2",
+        "a3b4",
+        "c7c5",
+        "b4b5",
+        "a2a6"
+      ],
+      "finalFen": "r4rk1/pp3ppp/q7/1Kp2b2/4nP2/4P3/3B2PP/6NR w - - 2 26",
+      "pgn": "[Event \"public-regression-v1\"]\n[Site \"?\"]\n[Date \"????.??.??\"]\n[Round \"?\"]\n[White \"seeded-random-v1\"]\n[Black \"argon-low-v1\"]\n[Result \"0-1\"]\n[Termination \"checkmate\"]\n[Seed \"43\"]\n\n1. c4 e5 2. b3 Nf6 3. d4 exd4 4. f4 Bb4+ 5. Nc3 Bxc3+ 6. Kf2 Bxa1 7. Qxd4 Bxd4+ 8. e3 Bc5 9. Ke2 O-O 10. b4 Bxb4 11. Kd3 d5 12. Kd4 dxc4+ 13. Kxc4 Qd5+ 14. Kxb4 Nc6+ 15. Ka4 Qa5+ 16. Kb3 Be6+ 17. Kc2 Bf5+ 18. Bd3 Nb4+ 19. Kc3 Qc5+ 20. Bc4 Ne4+ 21. Kb2 Qxc4 22. Bd2 Qc2+ 23. Ka3 Qxa2+ 24. Kxb4 c5+ 25. Kb5 Qa6# 0-1"
+    },
+    {
+      "seed": 97,
+      "color": "w",
+      "result": {
+        "kind": "win",
+        "reason": "checkmate",
+        "winner": "w"
+      },
+      "error": null,
+      "attemptedMove": null,
+      "plies": 17,
+      "moves": [
+        "e2e4",
+        "a7a5",
+        "d2d4",
+        "a8a6",
+        "f1a6",
+        "b7b6",
+        "a6c8",
+        "g8f6",
+        "c8b7",
+        "b8c6",
+        "e4e5",
+        "h8g8",
+        "e5f6",
+        "g8h8",
+        "f6g7",
+        "f7f5",
+        "d1h5"
+      ],
+      "finalFen": "3qkb1r/1Bppp1Pp/1pn5/p4p1Q/3P4/8/PPP2PPP/RNB1K1NR b KQ - 1 9",
+      "pgn": "[Event \"public-regression-v1\"]\n[Site \"?\"]\n[Date \"????.??.??\"]\n[Round \"?\"]\n[White \"argon-low-v1\"]\n[Black \"seeded-random-v1\"]\n[Result \"1-0\"]\n[Termination \"checkmate\"]\n[Seed \"97\"]\n\n1. e4 a5 2. d4 Ra6 3. Bxa6 b6 4. Bxc8 Nf6 5. Bb7 Nc6 6. e5 Rg8 7. exf6 Rh8 8. fxg7 f5 9. Qh5# 1-0"
+    },
+    {
+      "seed": 97,
+      "color": "b",
+      "result": {
+        "kind": "win",
+        "reason": "checkmate",
+        "winner": "b"
+      },
+      "error": null,
+      "attemptedMove": null,
+      "plies": 14,
+      "moves": [
+        "c2c4",
+        "e7e5",
+        "a2a3",
+        "g8f6",
+        "d2d3",
+        "d7d5",
+        "e2e4",
+        "d5e4",
+        "a3a4",
+        "f8c5",
+        "f2f3",
+        "d8d4",
+        "b2b3",
+        "d4f2"
+      ],
+      "finalFen": "rnb1k2r/ppp2ppp/5n2/2b1p3/P1P1p3/1P1P1P2/5qPP/RNBQKBNR w KQkq - 1 8",
+      "pgn": "[Event \"public-regression-v1\"]\n[Site \"?\"]\n[Date \"????.??.??\"]\n[Round \"?\"]\n[White \"seeded-random-v1\"]\n[Black \"argon-low-v1\"]\n[Result \"0-1\"]\n[Termination \"checkmate\"]\n[Seed \"97\"]\n\n1. c4 e5 2. a3 Nf6 3. d3 d5 4. e4 dxe4 5. a4 Bc5 6. f3 Qd4 7. b3 Qf2# 0-1"
+    },
+    {
+      "seed": 211,
+      "color": "w",
+      "result": {
+        "kind": "win",
+        "reason": "checkmate",
+        "winner": "w"
+      },
+      "error": null,
+      "attemptedMove": null,
+      "plies": 37,
+      "moves": [
+        "e2e4",
+        "b7b6",
+        "d2d4",
+        "c7c6",
+        "c2c4",
+        "g8f6",
+        "b1c3",
+        "e7e5",
+        "d4e5",
+        "b8a6",
+        "e5f6",
+        "f8a3",
+        "f6g7",
+        "h8g8",
+        "b2a3",
+        "b6b5",
+        "d1d4",
+        "a6b4",
+        "d4e5",
+        "d8e7",
+        "e5e7",
+        "e8e7",
+        "c1g5",
+        "e7e8",
+        "a3b4",
+        "f7f5",
+        "c4b5",
+        "h7h5",
+        "f1c4",
+        "c8a6",
+        "c4g8",
+        "f5e4",
+        "b5a6",
+        "a8b8",
+        "c3e4",
+        "b8b4",
+        "e4d6"
+      ],
+      "finalFen": "4k1B1/p2p2P1/P1pN4/6Bp/1r6/8/P4PPP/R3K1NR b KQ - 1 19",
+      "pgn": "[Event \"public-regression-v1\"]\n[Site \"?\"]\n[Date \"????.??.??\"]\n[Round \"?\"]\n[White \"argon-low-v1\"]\n[Black \"seeded-random-v1\"]\n[Result \"1-0\"]\n[Termination \"checkmate\"]\n[Seed \"211\"]\n\n1. e4 b6 2. d4 c6 3. c4 Nf6 4. Nc3 e5 5. dxe5 Na6 6. exf6 Ba3 7. fxg7 Rg8 8. bxa3 b5 9. Qd4 Nb4 10. Qe5+ Qe7 11. Qxe7+ Kxe7 12. Bg5+ Ke8 13. axb4 f5 14. cxb5 h5 15. Bc4 Ba6 16. Bxg8 fxe4 17. bxa6 Rb8 18. Nxe4 Rxb4 19. Nd6# 1-0"
+    },
+    {
+      "seed": 211,
+      "color": "b",
+      "result": {
+        "kind": "win",
+        "reason": "checkmate",
+        "winner": "b"
+      },
+      "error": null,
+      "attemptedMove": null,
+      "plies": 62,
+      "moves": [
+        "d2d3",
+        "d7d5",
+        "g2g3",
+        "e7e5",
+        "e2e3",
+        "g8f6",
+        "b1c3",
+        "b8c6",
+        "c3a4",
+        "b7b5",
+        "f2f3",
+        "b5a4",
+        "b2b4",
+        "f8b4",
+        "e1f2",
+        "e8g8",
+        "f1g2",
+        "b4c3",
+        "c1d2",
+        "c3a1",
+        "f2e2",
+        "a1b2",
+        "c2c3",
+        "c8a6",
+        "d1a4",
+        "a6d3",
+        "e2e1",
+        "d8d6",
+        "a4b4",
+        "c6b4",
+        "e1d1",
+        "d3c2",
+        "d1e2",
+        "c2d3",
+        "e2e1",
+        "b4c2",
+        "e1f2",
+        "d6b6",
+        "h2h3",
+        "c2e3",
+        "a2a3",
+        "e3d1",
+        "f2e1",
+        "b6f2",
+        "e1d1",
+        "f2e2",
+        "g1e2",
+        "d3e2",
+        "d1e1",
+        "e2d3",
+        "d2g5",
+        "b2c3",
+        "e1f2",
+        "a8b8",
+        "h3h4",
+        "b8b2",
+        "g5d2",
+        "c3d2",
+        "g2f1",
+        "d2f4",
+        "f2g1",
+        "f4e3"
+      ],
+      "finalFen": "5rk1/p1p2ppp/5n2/3pp3/7P/P2bbPP1/1r6/5BKR w - - 4 32",
+      "pgn": "[Event \"public-regression-v1\"]\n[Site \"?\"]\n[Date \"????.??.??\"]\n[Round \"?\"]\n[White \"seeded-random-v1\"]\n[Black \"argon-low-v1\"]\n[Result \"0-1\"]\n[Termination \"checkmate\"]\n[Seed \"211\"]\n\n1. d3 d5 2. g3 e5 3. e3 Nf6 4. Nc3 Nc6 5. Na4 b5 6. f3 bxa4 7. b4 Bxb4+ 8. Kf2 O-O 9. Bg2 Bc3 10. Bd2 Bxa1 11. Ke2 Bb2 12. c3 Ba6 13. Qxa4 Bxd3+ 14. Ke1 Qd6 15. Qb4 Nxb4 16. Kd1 Bc2+ 17. Ke2 Bd3+ 18. Ke1 Nc2+ 19. Kf2 Qb6 20. h3 Nxe3 21. a3 Nd1+ 22. Ke1 Qf2+ 23. Kxd1 Qe2+ 24. Nxe2 Bxe2+ 25. Ke1 Bd3 26. Bg5 Bxc3+ 27. Kf2 Rab8 28. h4 Rb2+ 29. Bd2 Bxd2 30. Bf1 Bf4+ 31. Kg1 Be3# 0-1"
+    }
+  ],
+  "totals": {
+    "wins": 8,
+    "draws": 0,
+    "losses": 0,
+    "stopped": 0,
+    "errors": 0
+  },
+  "model": "google/gemini-4-argon",
+  "thinking": "low",
+  "costMicros": 282615,
+  "calls": [
+    {
+      "model": "google/gemini-4-argon",
+      "move": "e2e4",
+      "costMicros": 1322,
+      "latencyMs": 2115.242583
+    },
+    {
+      "model": "google/gemini-4-argon",
+      "move": "d2d4",
+      "costMicros": 1572,
+      "latencyMs": 3003.1514579999994
+    },
+    {
+      "model": "google/gemini-4-argon",
+      "move": "c1g5",
+      "costMicros": 1754,
+      "latencyMs": 2191.0897920000007
+    },
+    {
+      "model": "google/gemini-4-argon",
+      "move": "b1c3",
+      "costMicros": 1900,
+      "latencyMs": 1963.3818329999995
+    },
+    {
+      "model": "google/gemini-4-argon",
+      "move": "g5h6",
+      "costMicros": 1982,
+      "latencyMs": 2622.4769159999996
+    },
+    {
+      "model": "google/gemini-4-argon",
+      "move": "h6g7",
+      "costMicros": 1986,
+      "latencyMs": 3390.1292080000003
+    },
+    {
+      "model": "google/gemini-4-argon",
+      "move": "g7h8",
+      "costMicros": 1892,
+      "latencyMs": 1934.3595839999998
+    },
+    {
+      "model": "google/gemini-4-argon",
+      "move": "h8e5",
+      "costMicros": 1936,
+      "latencyMs": 2410.5879999999997
+    },
+    {
+      "model": "google/gemini-4-argon",
+      "move": "g1f3",
+      "costMicros": 1982,
+      "latencyMs": 2272.595416999997
+    },
+    {
+      "model": "google/gemini-4-argon",
+      "move": "f3h4",
+      "costMicros": 2006,
+      "latencyMs": 2437.886542
+    },
+    {
+      "model": "google/gemini-4-argon",
+      "move": "d1h5",
+      "costMicros": 2056,
+      "latencyMs": 2000.3347499999982
+    },
+    {
+      "model": "google/gemini-4-argon",
+      "move": "h5h6",
+      "costMicros": 2196,
+      "latencyMs": 3015.030999999999
+    },
+    {
+      "model": "google/gemini-4-argon",
+      "move": "h6f8",
+      "costMicros": 2214,
+      "latencyMs": 2605.5292080000036
+    },
+    {
+      "model": "google/gemini-4-argon",
+      "move": "e7e5",
+      "costMicros": 1340,
+      "latencyMs": 2589.6511669999963
+    },
+    {
+      "model": "google/gemini-4-argon",
+      "move": "d7d5",
+      "costMicros": 1588,
+      "latencyMs": 2966.2814999999973
+    },
+    {
+      "model": "google/gemini-4-argon",
+      "move": "g8f6",
+      "costMicros": 1798,
+      "latencyMs": 2085.0612919999985
+    },
+    {
+      "model": "google/gemini-4-argon",
+      "move": "c7c5",
+      "costMicros": 1768,
+      "latencyMs": 2249.5471670000043
+    },
+    {
+      "model": "google/gemini-4-argon",
+      "move": "b8c6",
+      "costMicros": 1782,
+      "latencyMs": 2093.8562079999974
+    },
+    {
+      "model": "google/gemini-4-argon",
+      "move": "c8e6",
+      "costMicros": 1852,
+      "latencyMs": 2319.013125000005
+    },
+    {
+      "model": "google/gemini-4-argon",
+      "move": "d5d4",
+      "costMicros": 1942,
+      "latencyMs": 2636.1933750000026
+    },
+    {
+      "model": "google/gemini-4-argon",
+      "move": "e6a2",
+      "costMicros": 2068,
+      "latencyMs": 2010.7902089999989
+    },
+    {
+      "model": "google/gemini-4-argon",
+      "move": "d8b6",
+      "costMicros": 2025,
+      "latencyMs": 2401.2548339999994
+    },
+    {
+      "model": "google/gemini-4-argon",
+      "move": "a2b3",
+      "costMicros": 2084,
+      "latencyMs": 2067.4227919999976
+    },
+    {
+      "model": "google/gemini-4-argon",
+      "move": "b3d1",
+      "costMicros": 2106,
+      "latencyMs": 2293.9131659999985
+    },
+    {
+      "model": "google/gemini-4-argon",
+      "move": "d1b3",
+      "costMicros": 2098,
+      "latencyMs": 1972.6002500000031
+    },
+    {
+      "model": "google/gemini-4-argon",
+      "move": "c6e5",
+      "costMicros": 2132,
+      "latencyMs": 2507.867999999995
+    },
+    {
+      "model": "google/gemini-4-argon",
+      "move": "b3d5",
+      "costMicros": 2206,
+      "latencyMs": 2344.620917
+    },
+    {
+      "model": "google/gemini-4-argon",
+      "move": "d5h1",
+      "costMicros": 2276,
+      "latencyMs": 2693.1511670000036
+    },
+    {
+      "model": "google/gemini-4-argon",
+      "move": "e5g6",
+      "costMicros": 2202,
+      "latencyMs": 2813.6592919999966
+    },
+    {
+      "model": "google/gemini-4-argon",
+      "move": "f8d6",
+      "costMicros": 2108,
+      "latencyMs": 2210.139208000008
+    },
+    {
+      "model": "google/gemini-4-argon",
+      "move": "d6g3",
+      "costMicros": 2304,
+      "latencyMs": 2707.8462500000023
+    },
+    {
+      "model": "google/gemini-4-argon",
+      "move": "g3h2",
+      "costMicros": 2410,
+      "latencyMs": 1904.5506250000035
+    },
+    {
+      "model": "google/gemini-4-argon",
+      "move": "h2g1",
+      "costMicros": 2394,
+      "latencyMs": 2675.5098750000034
+    },
+    {
+      "model": "google/gemini-4-argon",
+      "move": "e8c8",
+      "costMicros": 2250,
+      "latencyMs": 2469.898583000002
+    },
+    {
+      "model": "google/gemini-4-argon",
+      "move": "h1f3",
+      "costMicros": 2334,
+      "latencyMs": 3712.4440410000097
+    },
+    {
+      "model": "google/gemini-4-argon",
+      "move": "g1e3",
+      "costMicros": 2422,
+      "latencyMs": 3741.299082999991
+    },
+    {
+      "model": "google/gemini-4-argon",
+      "move": "d4c3",
+      "costMicros": 2518,
+      "latencyMs": 2419.7112909999996
+    },
+    {
+      "model": "google/gemini-4-argon",
+      "move": "f3d5",
+      "costMicros": 2610,
+      "latencyMs": 3855.0016669999895
+    },
+    {
+      "model": "google/gemini-4-argon",
+      "move": "e3c1",
+      "costMicros": 2604,
+      "latencyMs": 2054.2332090000127
+    },
+    {
+      "model": "google/gemini-4-argon",
+      "move": "e2e4",
+      "costMicros": 1352,
+      "latencyMs": 1979.2089170000108
+    },
+    {
+      "model": "google/gemini-4-argon",
+      "move": "d2d4",
+      "costMicros": 1602,
+      "latencyMs": 2592.1128749999916
+    },
+    {
+      "model": "google/gemini-4-argon",
+      "move": "g1f3",
+      "costMicros": 1772,
+      "latencyMs": 2157.789875000002
+    },
+    {
+      "model": "google/gemini-4-argon",
+      "move": "f1b5",
+      "costMicros": 1730,
+      "latencyMs": 2093.440540999989
+    },
+    {
+      "model": "google/gemini-4-argon",
+      "move": "e4e5",
+      "costMicros": 1910,
+      "latencyMs": 1962.2381250000035
+    },
+    {
+      "model": "google/gemini-4-argon",
+      "move": "e5f6",
+      "costMicros": 1934,
+      "latencyMs": 2073.652166999993
+    },
+    {
+      "model": "google/gemini-4-argon",
+      "move": "f6g7",
+      "costMicros": 1976,
+      "latencyMs": 1927.5544170000067
+    },
+    {
+      "model": "google/gemini-4-argon",
+      "move": "g7h8q",
+      "costMicros": 2250,
+      "latencyMs": 1896.815374999991
+    },
+    {
+      "model": "google/gemini-4-argon",
+      "move": "c1h6",
+      "costMicros": 2112,
+      "latencyMs": 2746.851250000007
+    },
+    {
+      "model": "google/gemini-4-argon",
+      "move": "h8f8",
+      "costMicros": 2176,
+      "latencyMs": 1945.818207999997
+    },
+    {
+      "model": "google/gemini-4-argon",
+      "move": "e7e5",
+      "costMicros": 1340,
+      "latencyMs": 2258.9736660000053
+    },
+    {
+      "model": "google/gemini-4-argon",
+      "move": "g8f6",
+      "costMicros": 1590,
+      "latencyMs": 3404.0571659999987
+    },
+    {
+      "model": "google/gemini-4-argon",
+      "move": "e5d4",
+      "costMicros": 1592,
+      "latencyMs": 1993.1539170000033
+    },
+    {
+      "model": "google/gemini-4-argon",
+      "move": "f8b4",
+      "costMicros": 1594,
+      "latencyMs": 2098.996583
+    },
+    {
+      "model": "google/gemini-4-argon",
+      "move": "b4c3",
+      "costMicros": 1758,
+      "latencyMs": 2078.92349999999
+    },
+    {
+      "model": "google/gemini-4-argon",
+      "move": "c3a1",
+      "costMicros": 1720,
+      "latencyMs": 2401.5734999999986
+    },
+    {
+      "model": "google/gemini-4-argon",
+      "move": "a1d4",
+      "costMicros": 1652,
+      "latencyMs": 2477.4391250000044
+    },
+    {
+      "model": "google/gemini-4-argon",
+      "move": "d4c5",
+      "costMicros": 1762,
+      "latencyMs": 3389.464666999993
+    },
+    {
+      "model": "google/gemini-4-argon",
+      "move": "e8g8",
+      "costMicros": 1818,
+      "latencyMs": 2384.583541
+    },
+    {
+      "model": "google/gemini-4-argon",
+      "move": "c5b4",
+      "costMicros": 1718,
+      "latencyMs": 2411.219666000019
+    },
+    {
+      "model": "google/gemini-4-argon",
+      "move": "d7d5",
+      "costMicros": 1798,
+      "latencyMs": 2668.1217500000203
+    },
+    {
+      "model": "google/gemini-4-argon",
+      "move": "d5c4",
+      "costMicros": 1976,
+      "latencyMs": 2103.1856249999837
+    },
+    {
+      "model": "google/gemini-4-argon",
+      "move": "d8d5",
+      "costMicros": 2102,
+      "latencyMs": 2193.8804999999993
+    },
+    {
+      "model": "google/gemini-4-argon",
+      "move": "b8c6",
+      "costMicros": 2232,
+      "latencyMs": 2005.1938329999975
+    },
+    {
+      "model": "google/gemini-4-argon",
+      "move": "d5a5",
+      "costMicros": 2310,
+      "latencyMs": 2804.9067090000026
+    },
+    {
+      "model": "google/gemini-4-argon",
+      "move": "c8e6",
+      "costMicros": 2188,
+      "latencyMs": 2203.8350419999915
+    },
+    {
+      "model": "google/gemini-4-argon",
+      "move": "e6f5",
+      "costMicros": 2402,
+      "latencyMs": 2439.7972500000033
+    },
+    {
+      "model": "google/gemini-4-argon",
+      "move": "c6b4",
+      "costMicros": 2336,
+      "latencyMs": 2382.7429160000174
+    },
+    {
+      "model": "google/gemini-4-argon",
+      "move": "a5c5",
+      "costMicros": 2312,
+      "latencyMs": 2233.919082999986
+    },
+    {
+      "model": "google/gemini-4-argon",
+      "move": "f6e4",
+      "costMicros": 2436,
+      "latencyMs": 2090.8935000000056
+    },
+    {
+      "model": "google/gemini-4-argon",
+      "move": "c5c4",
+      "costMicros": 2374,
+      "latencyMs": 2954.696458999999
+    },
+    {
+      "model": "google/gemini-4-argon",
+      "move": "c4c2",
+      "costMicros": 2540,
+      "latencyMs": 2165.0530410000065
+    },
+    {
+      "model": "google/gemini-4-argon",
+      "move": "c2a2",
+      "costMicros": 2498,
+      "latencyMs": 2728.874332999985
+    },
+    {
+      "model": "google/gemini-4-argon",
+      "move": "c7c5",
+      "costMicros": 2404,
+      "latencyMs": 2182.3436670000083
+    },
+    {
+      "model": "google/gemini-4-argon",
+      "move": "a2a6",
+      "costMicros": 2368,
+      "latencyMs": 2119.4625000000233
+    },
+    {
+      "model": "google/gemini-4-argon",
+      "move": "e2e4",
+      "costMicros": 1362,
+      "latencyMs": 2620.7615000000224
+    },
+    {
+      "model": "google/gemini-4-argon",
+      "move": "d2d4",
+      "costMicros": 1572,
+      "latencyMs": 2088.9859580000048
+    },
+    {
+      "model": "google/gemini-4-argon",
+      "move": "f1a6",
+      "costMicros": 1768,
+      "latencyMs": 2085.6862919999985
+    },
+    {
+      "model": "google/gemini-4-argon",
+      "move": "a6c8",
+      "costMicros": 1854,
+      "latencyMs": 2249.3394589999807
+    },
+    {
+      "model": "google/gemini-4-argon",
+      "move": "c8b7",
+      "costMicros": 1794,
+      "latencyMs": 2616.095000000001
+    },
+    {
+      "model": "google/gemini-4-argon",
+      "move": "e4e5",
+      "costMicros": 1858,
+      "latencyMs": 2335.846583000006
+    },
+    {
+      "model": "google/gemini-4-argon",
+      "move": "e5f6",
+      "costMicros": 1892,
+      "latencyMs": 1972.3008749999863
+    },
+    {
+      "model": "google/gemini-4-argon",
+      "move": "f6g7",
+      "costMicros": 1900,
+      "latencyMs": 2617.1114169999782
+    },
+    {
+      "model": "google/gemini-4-argon",
+      "move": "d1h5",
+      "costMicros": 2190,
+      "latencyMs": 2049.8625000000175
+    },
+    {
+      "model": "google/gemini-4-argon",
+      "move": "e7e5",
+      "costMicros": 1340,
+      "latencyMs": 1963.508582999988
+    },
+    {
+      "model": "google/gemini-4-argon",
+      "move": "g8f6",
+      "costMicros": 1630,
+      "latencyMs": 2614.4682079999766
+    },
+    {
+      "model": "google/gemini-4-argon",
+      "move": "d7d5",
+      "costMicros": 1574,
+      "latencyMs": 3161.296540999989
+    },
+    {
+      "model": "google/gemini-4-argon",
+      "move": "d5e4",
+      "costMicros": 1826,
+      "latencyMs": 2739.9991670000018
+    },
+    {
+      "model": "google/gemini-4-argon",
+      "move": "f8c5",
+      "costMicros": 1870,
+      "latencyMs": 2093.7261250000156
+    },
+    {
+      "model": "google/gemini-4-argon",
+      "move": "d8d4",
+      "costMicros": 2074,
+      "latencyMs": 2124.7211670000106
+    },
+    {
+      "model": "google/gemini-4-argon",
+      "move": "d4f2",
+      "costMicros": 2150,
+      "latencyMs": 2105.214000000007
+    },
+    {
+      "model": "google/gemini-4-argon",
+      "move": "e2e4",
+      "costMicros": 1352,
+      "latencyMs": 6336.71083299999
+    },
+    {
+      "model": "google/gemini-4-argon",
+      "move": "d2d4",
+      "costMicros": 1576,
+      "latencyMs": 2065.4924579999933
+    },
+    {
+      "model": "google/gemini-4-argon",
+      "move": "c2c4",
+      "costMicros": 1772,
+      "latencyMs": 3728.328332999983
+    },
+    {
+      "model": "google/gemini-4-argon",
+      "move": "b1c3",
+      "costMicros": 1766,
+      "latencyMs": 1902.085584000015
+    },
+    {
+      "model": "google/gemini-4-argon",
+      "move": "d4e5",
+      "costMicros": 1874,
+      "latencyMs": 2084.798207999993
+    },
+    {
+      "model": "google/gemini-4-argon",
+      "move": "e5f6",
+      "costMicros": 1989,
+      "latencyMs": 2637.131625000009
+    },
+    {
+      "model": "google/gemini-4-argon",
+      "move": "f6g7",
+      "costMicros": 2005,
+      "latencyMs": 3279.7505409999867
+    },
+    {
+      "model": "google/gemini-4-argon",
+      "move": "b2a3",
+      "costMicros": 1970,
+      "latencyMs": 2913.7843750000175
+    },
+    {
+      "model": "google/gemini-4-argon",
+      "move": "d1d4",
+      "costMicros": 1996,
+      "latencyMs": 4204.27554100001
+    },
+    {
+      "model": "google/gemini-4-argon",
+      "move": "d4e5",
+      "costMicros": 2072,
+      "latencyMs": 2485.1717500000086
+    },
+    {
+      "model": "google/gemini-4-argon",
+      "move": "e5e7",
+      "costMicros": 2142,
+      "latencyMs": 2021.2969999999914
+    },
+    {
+      "model": "google/gemini-4-argon",
+      "move": "c1g5",
+      "costMicros": 1876,
+      "latencyMs": 4697.665458000003
+    },
+    {
+      "model": "google/gemini-4-argon",
+      "move": "a3b4",
+      "costMicros": 2005,
+      "latencyMs": 2120.8637500000186
+    },
+    {
+      "model": "google/gemini-4-argon",
+      "move": "c4b5",
+      "costMicros": 2072,
+      "latencyMs": 4519.193958000018
+    },
+    {
+      "model": "google/gemini-4-argon",
+      "move": "f1c4",
+      "costMicros": 2102,
+      "latencyMs": 2229.5701250000275
+    },
+    {
+      "model": "google/gemini-4-argon",
+      "move": "c4g8",
+      "costMicros": 2234,
+      "latencyMs": 2094.464708000014
+    },
+    {
+      "model": "google/gemini-4-argon",
+      "move": "b5a6",
+      "costMicros": 2206,
+      "latencyMs": 2629.762083000038
+    },
+    {
+      "model": "google/gemini-4-argon",
+      "move": "c3e4",
+      "costMicros": 2182,
+      "latencyMs": 2237.8580000000075
+    },
+    {
+      "model": "google/gemini-4-argon",
+      "move": "e4d6",
+      "costMicros": 2150,
+      "latencyMs": 2077.846917000017
+    },
+    {
+      "model": "google/gemini-4-argon",
+      "move": "d7d5",
+      "costMicros": 1338,
+      "latencyMs": 2128.547332999995
+    },
+    {
+      "model": "google/gemini-4-argon",
+      "move": "e7e5",
+      "costMicros": 1598,
+      "latencyMs": 2518.4096250000293
+    },
+    {
+      "model": "google/gemini-4-argon",
+      "move": "g8f6",
+      "costMicros": 1788,
+      "latencyMs": 2996.5786669999943
+    },
+    {
+      "model": "google/gemini-4-argon",
+      "move": "b8c6",
+      "costMicros": 1772,
+      "latencyMs": 2259.0104580000043
+    },
+    {
+      "model": "google/gemini-4-argon",
+      "move": "b7b5",
+      "costMicros": 1820,
+      "latencyMs": 2083.8988339999923
+    },
+    {
+      "model": "google/gemini-4-argon",
+      "move": "b5a4",
+      "costMicros": 1906,
+      "latencyMs": 2634.0581250000396
+    },
+    {
+      "model": "google/gemini-4-argon",
+      "move": "f8b4",
+      "costMicros": 1898,
+      "latencyMs": 2527.3450000000303
+    },
+    {
+      "model": "google/gemini-4-argon",
+      "move": "e8g8",
+      "costMicros": 2038,
+      "latencyMs": 2608.444334
+    },
+    {
+      "model": "google/gemini-4-argon",
+      "move": "b4c3",
+      "costMicros": 1964,
+      "latencyMs": 2830.7343329999712
+    },
+    {
+      "model": "google/gemini-4-argon",
+      "move": "c3a1",
+      "costMicros": 1966,
+      "latencyMs": 2098.3421250000247
+    },
+    {
+      "model": "google/gemini-4-argon",
+      "move": "a1b2",
+      "costMicros": 1918,
+      "latencyMs": 2430.0940409999457
+    },
+    {
+      "model": "google/gemini-4-argon",
+      "move": "c8a6",
+      "costMicros": 1969,
+      "latencyMs": 2276.1122089999844
+    },
+    {
+      "model": "google/gemini-4-argon",
+      "move": "a6d3",
+      "costMicros": 1932,
+      "latencyMs": 2420.491667000053
+    },
+    {
+      "model": "google/gemini-4-argon",
+      "move": "d8d6",
+      "costMicros": 2118,
+      "latencyMs": 5046.833125000005
+    },
+    {
+      "model": "google/gemini-4-argon",
+      "move": "c6b4",
+      "costMicros": 2258,
+      "latencyMs": 1944.4022090000217
+    },
+    {
+      "model": "google/gemini-4-argon",
+      "move": "d3c2",
+      "costMicros": 2332,
+      "latencyMs": 2275.0919170000125
+    },
+    {
+      "model": "google/gemini-4-argon",
+      "move": "c2d3",
+      "costMicros": 2316,
+      "latencyMs": 2216.826040999964
+    },
+    {
+      "model": "google/gemini-4-argon",
+      "move": "b4c2",
+      "costMicros": 2362,
+      "latencyMs": 2224.217333000037
+    },
+    {
+      "model": "google/gemini-4-argon",
+      "move": "d6b6",
+      "costMicros": 2420,
+      "latencyMs": 2082.647291000001
+    },
+    {
+      "model": "google/gemini-4-argon",
+      "move": "c2e3",
+      "costMicros": 2534,
+      "latencyMs": 2653.3085830000346
+    },
+    {
+      "model": "google/gemini-4-argon",
+      "move": "e3d1",
+      "costMicros": 2574,
+      "latencyMs": 2195.9100000000326
+    },
+    {
+      "model": "google/gemini-4-argon",
+      "move": "b6f2",
+      "costMicros": 2588,
+      "latencyMs": 2613.7648749999935
+    },
+    {
+      "model": "google/gemini-4-argon",
+      "move": "f2e2",
+      "costMicros": 2462,
+      "latencyMs": 2812.73458400002
+    },
+    {
+      "model": "google/gemini-4-argon",
+      "move": "d3e2",
+      "costMicros": 2194,
+      "latencyMs": 2418.2931249999674
+    },
+    {
+      "model": "google/gemini-4-argon",
+      "move": "e2d3",
+      "costMicros": 2170,
+      "latencyMs": 2336.687291999988
+    },
+    {
+      "model": "google/gemini-4-argon",
+      "move": "b2c3",
+      "costMicros": 2244,
+      "latencyMs": 2143.383792000008
+    },
+    {
+      "model": "google/gemini-4-argon",
+      "move": "a8b8",
+      "costMicros": 2312,
+      "latencyMs": 2447.1252920000115
+    },
+    {
+      "model": "google/gemini-4-argon",
+      "move": "b8b2",
+      "costMicros": 2480,
+      "latencyMs": 2603.5405420000316
+    },
+    {
+      "model": "google/gemini-4-argon",
+      "move": "c3d2",
+      "costMicros": 2478,
+      "latencyMs": 2960.456999999995
+    },
+    {
+      "model": "google/gemini-4-argon",
+      "move": "d2f4",
+      "costMicros": 2580,
+      "latencyMs": 2238.4667500000214
+    },
+    {
+      "model": "google/gemini-4-argon",
+      "move": "f4e3",
+      "costMicros": 2638,
+      "latencyMs": 2599.389708999952
+    }
+  ]
+}

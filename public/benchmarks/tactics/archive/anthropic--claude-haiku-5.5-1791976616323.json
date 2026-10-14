@@ -1,0 +1,432 @@
+{
+  "suite": "tactics-stratified-v1",
+  "sourceHash": "0bfb8f5b12c335c3eb1090e78c8aa7408a428cd5433f4aca0adf041d3bd813c4",
+  "id": "anthropic--claude-haiku-5.5",
+  "model": "anthropic/claude-haiku-5.5",
+  "label": "Claude Haiku 5.5",
+  "kind": "model",
+  "reasoning": {
+    "effort": "low"
+  },
+  "configHash": null,
+  "config": null,
+  "total": 32,
+  "attempted": 7,
+  "successes": 1,
+  "errors": 30,
+  "accuracy": 0.03125,
+  "interval": {
+    "low": 0.005537860164003122,
+    "high": 0.15744263820012558
+  },
+  "medianMs": 8902.245041999966,
+  "costMicros": 3123,
+  "complete": false,
+  "stopReason": "OpenRouter HTTP 408",
+  "bands": [
+    {
+      "band": "Foundation",
+      "total": 8,
+      "successes": 1
+    },
+    {
+      "band": "Intermediate",
+      "total": 8,
+      "successes": 0
+    },
+    {
+      "band": "Advanced",
+      "total": 8,
+      "successes": 0
+    },
+    {
+      "band": "Expert",
+      "total": 8,
+      "successes": 0
+    }
+  ],
+  "evidence": "/benchmarks/tactics/anthropic--claude-haiku-5.5.json",
+  "cases": [
+    {
+      "id": "nVmDK",
+      "band": "Foundation",
+      "fen": "8/r5k1/8/3Q2p1/2pP4/Pp6/1P3r2/KR6 b - - 0 52",
+      "expected": "a7a3",
+      "move": null,
+      "correct": false,
+      "error": "The \"string\" argument must be of type string or an instance of Buffer or ArrayBuffer. Received null",
+      "attempted": true,
+      "latencyMs": 11696.190165999986,
+      "costMicros": 590,
+      "actualModel": "anthropic/claude-haiku-5.5",
+      "requestId": "gen-1791976389-Y1VBuSx5YPEcQPH0IgWY"
+    },
+    {
+      "id": "M0Ao6",
+      "band": "Foundation",
+      "fen": "2rq1r2/p2nb1kB/b2pppP1/7P/3P4/5N2/P1Qn1P2/2KR3R w - - 0 22",
+      "expected": "h5h6",
+      "move": "d1d2",
+      "correct": false,
+      "error": null,
+      "attempted": true,
+      "latencyMs": 6818.955915999948,
+      "costMicros": 359,
+      "actualModel": "anthropic/claude-haiku-5.5",
+      "requestId": "gen-1791976401-SwiTYbkFAGySyzMxvxkt"
+    },
+    {
+      "id": "eN1Ve",
+      "band": "Foundation",
+      "fen": "r4rk1/ppp2p1p/2np1p2/2b1p3/4P1b1/2PP1N2/PP3P1P/RN2KB1R w KQ - 0 10",
+      "expected": "h1g1",
+      "move": null,
+      "correct": false,
+      "error": "The \"string\" argument must be of type string or an instance of Buffer or ArrayBuffer. Received null",
+      "attempted": true,
+      "latencyMs": 8902.245041999966,
+      "costMicros": 581,
+      "actualModel": "anthropic/claude-haiku-5.5",
+      "requestId": "gen-1791976408-47ALms3FPqJrPNdKCmG8"
+    },
+    {
+      "id": "AdkYm",
+      "band": "Foundation",
+      "fen": "r5r1/pb1pk3/2pR4/1p2q2p/1P2P1n1/2N2QP1/1P3P1p/3R3K w - - 1 26",
+      "expected": "d6d7",
+      "move": null,
+      "correct": false,
+      "error": "The \"string\" argument must be of type string or an instance of Buffer or ArrayBuffer. Received null",
+      "attempted": true,
+      "latencyMs": 9185.524582999991,
+      "costMicros": 600,
+      "actualModel": "anthropic/claude-haiku-5.5",
+      "requestId": "gen-1791976417-vz6OtXf91RErEwOTjCx3"
+    },
+    {
+      "id": "vZXQ2",
+      "band": "Foundation",
+      "fen": "3k2r1/1R6/p1p5/P2p4/3P4/2r3BP/6PK/8 w - - 0 41",
+      "expected": "b7b8",
+      "move": "b7b8",
+      "correct": true,
+      "error": null,
+      "attempted": true,
+      "latencyMs": 8295.629624999943,
+      "costMicros": 402,
+      "actualModel": "anthropic/claude-haiku-5.5",
+      "requestId": "gen-1791976426-emd1fSa1YG2sX2s0oWpd"
+    },
+    {
+      "id": "7Xg6X",
+      "band": "Foundation",
+      "fen": "8/pp1b1p1k/4p1pp/3p4/3Q1P2/PP6/2r3q1/3K3R w - - 2 35",
+      "expected": "h1h6",
+      "move": null,
+      "correct": false,
+      "error": "The \"string\" argument must be of type string or an instance of Buffer or ArrayBuffer. Received null",
+      "attempted": true,
+      "latencyMs": 8703.57670799992,
+      "costMicros": 591,
+      "actualModel": "anthropic/claude-haiku-5.5",
+      "requestId": "gen-1791976434-9qWtgDEXnaT0ykRpjMEY"
+    },
+    {
+      "id": "wggdx",
+      "band": "Foundation",
+      "fen": "8/8/8/2K5/8/p2k4/P7/8 b - - 4 62",
+      "expected": "d3c3",
+      "move": null,
+      "correct": false,
+      "error": "OpenRouter HTTP 408",
+      "attempted": true,
+      "latencyMs": 21369.687000000034,
+      "costMicros": 0,
+      "actualModel": null,
+      "requestId": null
+    },
+    {
+      "id": "1fSFn",
+      "band": "Foundation",
+      "expected": "a5a2",
+      "move": null,
+      "correct": false,
+      "error": "OpenRouter HTTP 408",
+      "attempted": false,
+      "latencyMs": 0,
+      "costMicros": 0
+    },
+    {
+      "id": "SpT8p",
+      "band": "Intermediate",
+      "expected": "a5a2",
+      "move": null,
+      "correct": false,
+      "error": "OpenRouter HTTP 408",
+      "attempted": false,
+      "latencyMs": 0,
+      "costMicros": 0
+    },
+    {
+      "id": "vxjwF",
+      "band": "Intermediate",
+      "expected": "d1a4",
+      "move": null,
+      "correct": false,
+      "error": "OpenRouter HTTP 408",
+      "attempted": false,
+      "latencyMs": 0,
+      "costMicros": 0
+    },
+    {
+      "id": "X4p1Y",
+      "band": "Intermediate",
+      "expected": "g5g4",
+      "move": null,
+      "correct": false,
+      "error": "OpenRouter HTTP 408",
+      "attempted": false,
+      "latencyMs": 0,
+      "costMicros": 0
+    },
+    {
+      "id": "vD6f2",
+      "band": "Intermediate",
+      "expected": "f4c1",
+      "move": null,
+      "correct": false,
+      "error": "OpenRouter HTTP 408",
+      "attempted": false,
+      "latencyMs": 0,
+      "costMicros": 0
+    },
+    {
+      "id": "ve5kW",
+      "band": "Intermediate",
+      "expected": "b8b2",
+      "move": null,
+      "correct": false,
+      "error": "OpenRouter HTTP 408",
+      "attempted": false,
+      "latencyMs": 0,
+      "costMicros": 0
+    },
+    {
+      "id": "9dty7",
+      "band": "Intermediate",
+      "expected": "a5a4",
+      "move": null,
+      "correct": false,
+      "error": "OpenRouter HTTP 408",
+      "attempted": false,
+      "latencyMs": 0,
+      "costMicros": 0
+    },
+    {
+      "id": "XJYS0",
+      "band": "Intermediate",
+      "expected": "f3g2",
+      "move": null,
+      "correct": false,
+      "error": "OpenRouter HTTP 408",
+      "attempted": false,
+      "latencyMs": 0,
+      "costMicros": 0
+    },
+    {
+      "id": "2u5a3",
+      "band": "Intermediate",
+      "expected": "e1c2",
+      "move": null,
+      "correct": false,
+      "error": "OpenRouter HTTP 408",
+      "attempted": false,
+      "latencyMs": 0,
+      "costMicros": 0
+    },
+    {
+      "id": "l93Xv",
+      "band": "Advanced",
+      "expected": "e5f3",
+      "move": null,
+      "correct": false,
+      "error": "OpenRouter HTTP 408",
+      "attempted": false,
+      "latencyMs": 0,
+      "costMicros": 0
+    },
+    {
+      "id": "8ZdpE",
+      "band": "Advanced",
+      "expected": "f8d8",
+      "move": null,
+      "correct": false,
+      "error": "OpenRouter HTTP 408",
+      "attempted": false,
+      "latencyMs": 0,
+      "costMicros": 0
+    },
+    {
+      "id": "ZIzQY",
+      "band": "Advanced",
+      "expected": "g4h6",
+      "move": null,
+      "correct": false,
+      "error": "OpenRouter HTTP 408",
+      "attempted": false,
+      "latencyMs": 0,
+      "costMicros": 0
+    },
+    {
+      "id": "xdyDA",
+      "band": "Advanced",
+      "expected": "f3g5",
+      "move": null,
+      "correct": false,
+      "error": "OpenRouter HTTP 408",
+      "attempted": false,
+      "latencyMs": 0,
+      "costMicros": 0
+    },
+    {
+      "id": "LWPKP",
+      "band": "Advanced",
+      "expected": "d1g1",
+      "move": null,
+      "correct": false,
+      "error": "OpenRouter HTTP 408",
+      "attempted": false,
+      "latencyMs": 0,
+      "costMicros": 0
+    },
+    {
+      "id": "25zbt",
+      "band": "Advanced",
+      "expected": "g8g2",
+      "move": null,
+      "correct": false,
+      "error": "OpenRouter HTTP 408",
+      "attempted": false,
+      "latencyMs": 0,
+      "costMicros": 0
+    },
+    {
+      "id": "enDRE",
+      "band": "Advanced",
+      "expected": "d5d6",
+      "move": null,
+      "correct": false,
+      "error": "OpenRouter HTTP 408",
+      "attempted": false,
+      "latencyMs": 0,
+      "costMicros": 0
+    },
+    {
+      "id": "rNxee",
+      "band": "Advanced",
+      "expected": "g5h6",
+      "move": null,
+      "correct": false,
+      "error": "OpenRouter HTTP 408",
+      "attempted": false,
+      "latencyMs": 0,
+      "costMicros": 0
+    },
+    {
+      "id": "1nUO4",
+      "band": "Expert",
+      "expected": "f5f6",
+      "move": null,
+      "correct": false,
+      "error": "OpenRouter HTTP 408",
+      "attempted": false,
+      "latencyMs": 0,
+      "costMicros": 0
+    },
+    {
+      "id": "N5Axl",
+      "band": "Expert",
+      "expected": "e5g3",
+      "move": null,
+      "correct": false,
+      "error": "OpenRouter HTTP 408",
+      "attempted": false,
+      "latencyMs": 0,
+      "costMicros": 0
+    },
+    {
+      "id": "m8P8S",
+      "band": "Expert",
+      "expected": "d2d1",
+      "move": null,
+      "correct": false,
+      "error": "OpenRouter HTTP 408",
+      "attempted": false,
+      "latencyMs": 0,
+      "costMicros": 0
+    },
+    {
+      "id": "HjrJr",
+      "band": "Expert",
+      "expected": "g6g2",
+      "move": null,
+      "correct": false,
+      "error": "OpenRouter HTTP 408",
+      "attempted": false,
+      "latencyMs": 0,
+      "costMicros": 0
+    },
+    {
+      "id": "YpAV5",
+      "band": "Expert",
+      "expected": "d6c7",
+      "move": null,
+      "correct": false,
+      "error": "OpenRouter HTTP 408",
+      "attempted": false,
+      "latencyMs": 0,
+      "costMicros": 0
+    },
+    {
+      "id": "5897U",
+      "band": "Expert",
+      "expected": "d3e3",
+      "move": null,
+      "correct": false,
+      "error": "OpenRouter HTTP 408",
+      "attempted": false,
+      "latencyMs": 0,
+      "costMicros": 0
+    },
+    {
+      "id": "EDXa8",
+      "band": "Expert",
+      "expected": "g3h3",
+      "move": null,
+      "correct": false,
+      "error": "OpenRouter HTTP 408",
+      "attempted": false,
+      "latencyMs": 0,
+      "costMicros": 0
+    },
+    {
+      "id": "yqgUl",
+      "band": "Expert",
+      "expected": "a6f1",
+      "move": null,
+      "correct": false,
+      "error": "OpenRouter HTTP 408",
+      "attempted": false,
+      "latencyMs": 0,
+      "costMicros": 0
+    }
+  ],
+  "unknownCostAttempts": 1,
+  "fixtureHash": "ebe40e59222b16b4b760e5dd0722a70400fe697e46cf2c3f814a58d2442e6466",
+  "annotation": {
+    "at": "2026-10-14T11:16:55.836Z",
+    "fixtureHash": "ebe40e59222b16b4b760e5dd0722a70400fe697e46cf2c3f814a58d2442e6466",
+    "harnessHash": "de7787324bc5c9d14a964e309458ba6e1856d5684ed59d8938ab8d0bf6751c1f",
+    "note": "Post-run integrity annotation of unchanged frozen positions and harness source; original sourceHash retained. Failed requests without billing are unknown, not free. Some initial pilot response token counts and finish reasons were not retained; later continuation records include them."
+  }
+}

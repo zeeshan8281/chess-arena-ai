@@ -1,0 +1,719 @@
+{
+  "id": "tactics-stratified-v1",
+  "source": "https://github.com/kagisearch/llm-chess-puzzles/blob/main/puzzles.csv",
+  "upstream": "https://database.lichess.org/#puzzles",
+  "license": "Lichess puzzles CC0; Kagi repository MIT",
+  "sourceSha256": "357ea9d9c3335b80438a380a2107bd574d7b47d843186971970c3f1ab6cff1bd",
+  "selection": "SHA256(chess-arena-tactics-v1:PuzzleId), first 8 per rating band; popularity >=80, plays >=1000. Frozen before model calls.",
+  "bands": [
+    [
+      "Foundation",
+      800,
+      1199
+    ],
+    [
+      "Intermediate",
+      1200,
+      1599
+    ],
+    [
+      "Advanced",
+      1600,
+      1999
+    ],
+    [
+      "Expert",
+      2000,
+      2600
+    ]
+  ],
+  "positions": [
+    {
+      "id": "nVmDK",
+      "fenBefore": "8/r5k1/3Q4/3q2p1/2pP4/Pp6/1P3r2/KR6 w - - 0 52",
+      "line": [
+        "d6d5",
+        "a7a3",
+        "b2a3",
+        "f2a2"
+      ],
+      "rating": 1149,
+      "band": "Foundation",
+      "themes": [
+        "endgame",
+        "mate",
+        "mateIn2",
+        "queenRookEndgame",
+        "sacrifice",
+        "short"
+      ],
+      "gameUrl": "https://lichess.org/tqXWBjzW#102"
+    },
+    {
+      "id": "M0Ao6",
+      "fenBefore": "2rq1r2/p2nb1kB/b2pppP1/7P/2nP4/5N2/P1QN1P2/2KR3R b - - 0 21",
+      "line": [
+        "c4d2",
+        "h5h6",
+        "g7h8",
+        "g6g7"
+      ],
+      "rating": 1180,
+      "band": "Foundation",
+      "themes": [
+        "advancedPawn",
+        "mate",
+        "mateIn2",
+        "middlegame",
+        "short"
+      ],
+      "gameUrl": "https://lichess.org/XAxBHqUV/black#41"
+    },
+    {
+      "id": "eN1Ve",
+      "fenBefore": "r1b2rk1/ppp2p1p/2np1p2/2b1p3/4P1P1/2PP1N2/PP3P1P/RN2KB1R b KQ - 1 9",
+      "line": [
+        "c8g4",
+        "h1g1",
+        "g8h8",
+        "g1g4"
+      ],
+      "rating": 1179,
+      "band": "Foundation",
+      "themes": [
+        "advantage",
+        "middlegame",
+        "pin",
+        "short"
+      ],
+      "gameUrl": "https://lichess.org/HtkaEddP/black#17"
+    },
+    {
+      "id": "AdkYm",
+      "fenBefore": "r5r1/pb1pk3/2pR1n2/1p2q2p/1P2P3/2N2QP1/1P3P1p/3R3K b - - 0 25",
+      "line": [
+        "f6g4",
+        "d6d7",
+        "e7e8",
+        "f3f7"
+      ],
+      "rating": 1196,
+      "band": "Foundation",
+      "themes": [
+        "fork",
+        "mate",
+        "mateIn2",
+        "middlegame",
+        "short"
+      ],
+      "gameUrl": "https://lichess.org/HQfRrtWb/black#49"
+    },
+    {
+      "id": "vZXQ2",
+      "fenBefore": "3k2r1/1R6/p1p5/P2p4/3P4/2P3BP/2r3PK/8 b - - 0 40",
+      "line": [
+        "c2c3",
+        "b7b8",
+        "d8e7",
+        "b8g8"
+      ],
+      "rating": 1099,
+      "band": "Foundation",
+      "themes": [
+        "crushing",
+        "endgame",
+        "short",
+        "skewer"
+      ],
+      "gameUrl": "https://lichess.org/luDIkrt7/black#79"
+    },
+    {
+      "id": "7Xg6X",
+      "fenBefore": "8/pp1b1p1k/4p1pp/3p4/3Q1P2/PP4q1/2r5/3K3R b - - 1 34",
+      "line": [
+        "g3g2",
+        "h1h6",
+        "h7h6",
+        "d4h8"
+      ],
+      "rating": 1194,
+      "band": "Foundation",
+      "themes": [
+        "attraction",
+        "endgame",
+        "mate",
+        "mateIn2",
+        "sacrifice",
+        "short"
+      ],
+      "gameUrl": "https://lichess.org/X9lb8Bs9/black#67"
+    },
+    {
+      "id": "wggdx",
+      "fenBefore": "8/8/8/3K4/8/p2k4/P7/8 w - - 3 62",
+      "line": [
+        "d5c5",
+        "d3c3",
+        "c5b5",
+        "c3b2",
+        "b5b4",
+        "b2a2",
+        "b4c3",
+        "a2b1"
+      ],
+      "rating": 1194,
+      "band": "Foundation",
+      "themes": [
+        "crushing",
+        "endgame",
+        "master",
+        "pawnEndgame",
+        "veryLong"
+      ],
+      "gameUrl": "https://lichess.org/j7XRgF90#122"
+    },
+    {
+      "id": "1fSFn",
+      "fenBefore": "r5R1/pp2kp1B/3rp3/q2p3P/8/1Pp1PP1N/PbQ5/1K1R4 w - - 6 23",
+      "line": [
+        "g8a8",
+        "a5a2",
+        "b1a2",
+        "d6a6",
+        "a2b1",
+        "a6a1"
+      ],
+      "rating": 835,
+      "band": "Foundation",
+      "themes": [
+        "attraction",
+        "long",
+        "mate",
+        "mateIn3",
+        "middlegame",
+        "queensideAttack",
+        "sacrifice"
+      ],
+      "gameUrl": "https://lichess.org/btsDQIMB#44"
+    },
+    {
+      "id": "SpT8p",
+      "fenBefore": "6k1/q4p1p/4pbp1/r7/1pB2P2/1Pp1P2P/P1Q4P/1K1R2R1 w - - 3 25",
+      "line": [
+        "e3e4",
+        "a5a2",
+        "c2a2",
+        "c3c2",
+        "b1c2",
+        "a7a2"
+      ],
+      "rating": 1230,
+      "band": "Intermediate",
+      "themes": [
+        "advancedPawn",
+        "advantage",
+        "attraction",
+        "deflection",
+        "long",
+        "middlegame",
+        "queensideAttack",
+        "sacrifice"
+      ],
+      "gameUrl": "https://lichess.org/Xy7gzvdh#48"
+    },
+    {
+      "id": "vxjwF",
+      "fenBefore": "rnbqkb1r/1p3ppp/p2ppn2/2p5/4P3/P1P2N2/1P1PBPPP/RNBQ1RK1 b kq - 0 6",
+      "line": [
+        "f6e4",
+        "d1a4",
+        "b8c6",
+        "a4e4"
+      ],
+      "rating": 1271,
+      "band": "Intermediate",
+      "themes": [
+        "advantage",
+        "fork",
+        "opening",
+        "short"
+      ],
+      "gameUrl": "https://lichess.org/DDPpO3Iu/black#11"
+    },
+    {
+      "id": "X4p1Y",
+      "fenBefore": "8/8/6p1/6R1/2pk4/3r4/2K5/8 b - - 9 52",
+      "line": [
+        "c4c3",
+        "g5g4",
+        "d4e3",
+        "g4g3",
+        "e3e4",
+        "g3d3"
+      ],
+      "rating": 1540,
+      "band": "Intermediate",
+      "themes": [
+        "crushing",
+        "endgame",
+        "long",
+        "rookEndgame"
+      ],
+      "gameUrl": "https://lichess.org/2BrkN7pC/black#103"
+    },
+    {
+      "id": "vD6f2",
+      "fenBefore": "3rr1k1/Q4ppp/8/3p1n2/1Pb2q2/P4B2/1B3RPP/2R3K1 w - - 0 24",
+      "line": [
+        "f3d5",
+        "f4c1",
+        "b2c1",
+        "e8e1",
+        "f2f1",
+        "e1f1"
+      ],
+      "rating": 1567,
+      "band": "Intermediate",
+      "themes": [
+        "fork",
+        "long",
+        "mate",
+        "mateIn3",
+        "middlegame",
+        "sacrifice"
+      ],
+      "gameUrl": "https://lichess.org/cIUQpvku#46"
+    },
+    {
+      "id": "ve5kW",
+      "fenBefore": "1r2r1k1/5p1p/1Q4p1/p2P4/2p1P1q1/2P5/1P4PP/R3R1K1 w - - 1 31",
+      "line": [
+        "b6d4",
+        "b8b2",
+        "d4f2",
+        "b2f2"
+      ],
+      "rating": 1269,
+      "band": "Intermediate",
+      "themes": [
+        "crushing",
+        "endgame",
+        "short"
+      ],
+      "gameUrl": "https://lichess.org/eyVmTMxp#60"
+    },
+    {
+      "id": "9dty7",
+      "fenBefore": "8/2r5/3pkpR1/p7/1P1RPP2/PKP1r3/8/8 w - - 2 37",
+      "line": [
+        "d4c4",
+        "a5a4",
+        "b3a4",
+        "c7c4"
+      ],
+      "rating": 1509,
+      "band": "Intermediate",
+      "themes": [
+        "crushing",
+        "deflection",
+        "endgame",
+        "rookEndgame",
+        "short"
+      ],
+      "gameUrl": "https://lichess.org/JCDvfTik#72"
+    },
+    {
+      "id": "XJYS0",
+      "fenBefore": "3rr1k1/1p3p1p/p5p1/2p5/P7/1PNP1bP1/3R1P1P/R4K2 w - - 0 23",
+      "line": [
+        "a1e1",
+        "f3g2",
+        "f1g2",
+        "e8e1"
+      ],
+      "rating": 1334,
+      "band": "Intermediate",
+      "themes": [
+        "advantage",
+        "deflection",
+        "endgame",
+        "short"
+      ],
+      "gameUrl": "https://lichess.org/AmexbJ4M#44"
+    },
+    {
+      "id": "2u5a3",
+      "fenBefore": "6k1/5p1p/6p1/8/8/Q2P2PP/4NP2/3qnK2 w - - 4 39",
+      "line": [
+        "e2f4",
+        "e1c2",
+        "f1g2",
+        "c2a3"
+      ],
+      "rating": 1562,
+      "band": "Intermediate",
+      "themes": [
+        "crushing",
+        "discoveredAttack",
+        "endgame",
+        "short"
+      ],
+      "gameUrl": "https://lichess.org/TPtYXpcB#76"
+    },
+    {
+      "id": "l93Xv",
+      "fenBefore": "r2q1rk1/ppp2ppp/5n2/3Pn1B1/8/2b2B2/PP3PPP/R2Q1RK1 w - - 0 14",
+      "line": [
+        "g5f6",
+        "e5f3",
+        "d1f3",
+        "c3f6"
+      ],
+      "rating": 1645,
+      "band": "Advanced",
+      "themes": [
+        "advantage",
+        "discoveredAttack",
+        "middlegame",
+        "short"
+      ],
+      "gameUrl": "https://lichess.org/Pp5WdsvH#26"
+    },
+    {
+      "id": "8ZdpE",
+      "fenBefore": "rn3rk1/pp3p1p/2p2Qp1/4p3/2P5/3qP2P/PP3PP1/R1B1K2R w KQ - 1 13",
+      "line": [
+        "f6e5",
+        "f8d8",
+        "f2f3",
+        "d3d1",
+        "e1f2",
+        "d1h1"
+      ],
+      "rating": 1642,
+      "band": "Advanced",
+      "themes": [
+        "crushing",
+        "long",
+        "middlegame",
+        "quietMove",
+        "skewer"
+      ],
+      "gameUrl": "https://lichess.org/M5lZGjZf#24"
+    },
+    {
+      "id": "ZIzQY",
+      "fenBefore": "r1bq2k1/p2Q1R2/1p2p1p1/3pN2p/3P2N1/8/PP5P/1K6 b - - 0 26",
+      "line": [
+        "c8d7",
+        "g4h6",
+        "g8h8",
+        "e5g6"
+      ],
+      "rating": 1639,
+      "band": "Advanced",
+      "themes": [
+        "endgame",
+        "mate",
+        "mateIn2",
+        "short"
+      ],
+      "gameUrl": "https://lichess.org/dpsv3wlq/black#51"
+    },
+    {
+      "id": "xdyDA",
+      "fenBefore": "5rk1/1pp1nqpp/p1n1b3/3r1p2/3P4/P1Q1PNP1/1B4BP/2R1R1K1 b - - 0 23",
+      "line": [
+        "d5d8",
+        "f3g5",
+        "f7f6",
+        "g5e6",
+        "f6e6",
+        "d4d5"
+      ],
+      "rating": 1751,
+      "band": "Advanced",
+      "themes": [
+        "crushing",
+        "long",
+        "middlegame"
+      ],
+      "gameUrl": "https://lichess.org/mKORr3gf/black#45"
+    },
+    {
+      "id": "LWPKP",
+      "fenBefore": "8/1k1r1P2/p5Kp/8/8/PP6/3p4/3Rr3 b - - 0 42",
+      "line": [
+        "e1g1",
+        "d1g1",
+        "d2d1r",
+        "g1d1",
+        "d7d1",
+        "f7f8q"
+      ],
+      "rating": 1629,
+      "band": "Advanced",
+      "themes": [
+        "advancedPawn",
+        "crushing",
+        "endgame",
+        "hangingPiece",
+        "long",
+        "promotion",
+        "rookEndgame"
+      ],
+      "gameUrl": "https://lichess.org/TPySgbvK/black#83"
+    },
+    {
+      "id": "25zbt",
+      "fenBefore": "2k3r1/ppp5/4R3/1Q3N2/4p3/2q5/P3R1P1/3r1K2 w - - 1 30",
+      "line": [
+        "f1f2",
+        "g8g2",
+        "f2g2",
+        "c3f3",
+        "g2h2",
+        "d1h1"
+      ],
+      "rating": 1830,
+      "band": "Advanced",
+      "themes": [
+        "attraction",
+        "long",
+        "mate",
+        "mateIn3",
+        "middlegame",
+        "sacrifice"
+      ],
+      "gameUrl": "https://lichess.org/UPdYLDP0#58"
+    },
+    {
+      "id": "enDRE",
+      "fenBefore": "3r3r/p1kpnq1p/1p1b4/1P1PBp2/2N5/1n2PQP1/1P4BP/5RK1 b - - 7 26",
+      "line": [
+        "d6e5",
+        "d5d6",
+        "e5d6",
+        "f3b7"
+      ],
+      "rating": 1701,
+      "band": "Advanced",
+      "themes": [
+        "clearance",
+        "mate",
+        "mateIn2",
+        "middlegame",
+        "short"
+      ],
+      "gameUrl": "https://lichess.org/Jxn6pNRR/black#51"
+    },
+    {
+      "id": "rNxee",
+      "fenBefore": "r3r1k1/pp3p1p/1np5/6Q1/2qP4/P7/1P3P1P/1K2R3 b - - 5 27",
+      "line": [
+        "g8f8",
+        "g5h6",
+        "f8g8",
+        "e1g1",
+        "g8h8",
+        "h6f6"
+      ],
+      "rating": 1613,
+      "band": "Advanced",
+      "themes": [
+        "endgame",
+        "long",
+        "mate",
+        "mateIn3"
+      ],
+      "gameUrl": "https://lichess.org/Hge8fsmk/black#53"
+    },
+    {
+      "id": "1nUO4",
+      "fenBefore": "3r1qk1/1p2rppp/p7/5P2/Q5R1/4PNbP/PP2R3/5K2 b - - 12 28",
+      "line": [
+        "g3b8",
+        "f5f6",
+        "e7e6",
+        "g4g7",
+        "f8g7",
+        "f6g7"
+      ],
+      "rating": 2053,
+      "band": "Expert",
+      "themes": [
+        "advancedPawn",
+        "crushing",
+        "kingsideAttack",
+        "long",
+        "middlegame",
+        "pin"
+      ],
+      "gameUrl": "https://lichess.org/AtQYXIIu/black#55"
+    },
+    {
+      "id": "N5Axl",
+      "fenBefore": "3q2r1/3P1pk1/p3b3/1p2Q3/P1pR4/2P5/1P4P1/6K1 b - - 4 47",
+      "line": [
+        "g7g6",
+        "e5g3",
+        "g6f6",
+        "g3g8",
+        "d8g8",
+        "d7d8q",
+        "g8d8",
+        "d4d8"
+      ],
+      "rating": 2058,
+      "band": "Expert",
+      "themes": [
+        "advancedPawn",
+        "crushing",
+        "endgame",
+        "exposedKing",
+        "master",
+        "promotion",
+        "superGM",
+        "veryLong"
+      ],
+      "gameUrl": "https://lichess.org/WrNrep7A/black#93"
+    },
+    {
+      "id": "m8P8S",
+      "fenBefore": "8/8/p1k5/1p5p/3B4/1R1n2P1/P2r1P1P/6K1 w - - 3 35",
+      "line": [
+        "a2a4",
+        "d2d1",
+        "g1g2",
+        "d3e1",
+        "g2h3",
+        "d1d4",
+        "a4b5",
+        "a6b5"
+      ],
+      "rating": 2010,
+      "band": "Expert",
+      "themes": [
+        "advantage",
+        "discoveredAttack",
+        "endgame",
+        "veryLong"
+      ],
+      "gameUrl": "https://lichess.org/wrDSSj2f#68"
+    },
+    {
+      "id": "HjrJr",
+      "fenBefore": "r5k1/2RR1pp1/p3r1qp/1p6/1P2p3/PQ2Pn1P/B4PP1/6K1 w - - 3 25",
+      "line": [
+        "g1h1",
+        "g6g2",
+        "h1g2",
+        "e6g6",
+        "g2f1",
+        "g6g1",
+        "f1e2",
+        "g1e1"
+      ],
+      "rating": 2066,
+      "band": "Expert",
+      "themes": [
+        "attraction",
+        "hookMate",
+        "kingsideAttack",
+        "mate",
+        "mateIn4",
+        "middlegame",
+        "sacrifice",
+        "veryLong"
+      ],
+      "gameUrl": "https://lichess.org/5iXKP9rA#48"
+    },
+    {
+      "id": "YpAV5",
+      "fenBefore": "8/8/R2K1kp1/3P1p1p/5P2/6P1/8/4r3 b - - 5 49",
+      "line": [
+        "e1g1",
+        "d6c7",
+        "f6f7",
+        "d5d6"
+      ],
+      "rating": 2035,
+      "band": "Expert",
+      "themes": [
+        "crushing",
+        "discoveredAttack",
+        "endgame",
+        "rookEndgame",
+        "short"
+      ],
+      "gameUrl": "https://lichess.org/1vzPPbjS/black#97"
+    },
+    {
+      "id": "5897U",
+      "fenBefore": "2r2r1k/p5p1/2p1Q2p/2RpBn2/3P4/3q4/P5PP/2R3K1 w - - 0 27",
+      "line": [
+        "c5c6",
+        "d3e3",
+        "g1h1",
+        "e3c1",
+        "c6c1",
+        "c8c1"
+      ],
+      "rating": 2038,
+      "band": "Expert",
+      "themes": [
+        "backRankMate",
+        "long",
+        "mate",
+        "mateIn3",
+        "middlegame",
+        "xRayAttack"
+      ],
+      "gameUrl": "https://lichess.org/hZp24joX#52"
+    },
+    {
+      "id": "EDXa8",
+      "fenBefore": "6k1/p4p1p/2p3p1/5b2/5b2/1BP3qP/PP2Q1P1/3r2BK w - - 0 30",
+      "line": [
+        "e2d1",
+        "g3h3",
+        "g2h3",
+        "f5e4",
+        "d1f3",
+        "e4f3"
+      ],
+      "rating": 2147,
+      "band": "Expert",
+      "themes": [
+        "doubleBishopMate",
+        "endgame",
+        "long",
+        "mate",
+        "mateIn3",
+        "sacrifice"
+      ],
+      "gameUrl": "https://lichess.org/RBsZVgFq#58"
+    },
+    {
+      "id": "yqgUl",
+      "fenBefore": "rn1qkb1r/3npp1p/b2p2p1/2pP4/Q7/2N2N2/PP2PPPP/R1B1KB1R w KQkq - 2 9",
+      "line": [
+        "e2e3",
+        "a6f1",
+        "a4a8",
+        "f1g2",
+        "h1g1",
+        "g2f3"
+      ],
+      "rating": 2002,
+      "band": "Expert",
+      "themes": [
+        "advantage",
+        "fork",
+        "long",
+        "opening"
+      ],
+      "gameUrl": "https://lichess.org/f1lXkbCW#16"
+    }
+  ]
+}

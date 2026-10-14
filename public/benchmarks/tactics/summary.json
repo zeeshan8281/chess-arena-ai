@@ -1,0 +1,437 @@
+{
+  "suite": "tactics-stratified-v1",
+  "generatedAt": "2026-10-14T11:20:36.908Z",
+  "sourceHash": "9ac85b4f9784ab7bd3d8f9a974faec9f0dfc9b829341b5b840eaaaabb253140f",
+  "fixtureHash": "ebe40e59222b16b4b760e5dd0722a70400fe697e46cf2c3f814a58d2442e6466",
+  "harnessSourceHash": "de7787324bc5c9d14a964e309458ba6e1856d5684ed59d8938ab8d0bf6751c1f",
+  "provenanceNote": "Summary updated by this runner; individual evidence files preserve their original execution sourceHash.",
+  "positions": 32,
+  "bands": [
+    "Foundation",
+    "Intermediate",
+    "Advanced",
+    "Expert"
+  ],
+  "protocol": "FEN + legal UCI moves + setup move; JSON schema; 1024 output-token cap; 45s deadline; no tools, retries, or repair. Model-specific reasoning settings recorded.",
+  "rows": [
+    {
+      "id": "google--gemini-4-argon",
+      "model": "google/gemini-4-argon",
+      "label": "Gemini 4 Argon",
+      "kind": "model",
+      "reasoning": {
+        "effort": "low"
+      },
+      "configHash": null,
+      "config": null,
+      "total": 32,
+      "attempted": 32,
+      "successes": 19,
+      "errors": 1,
+      "accuracy": 0.59375,
+      "interval": {
+        "low": 0.42260024875382873,
+        "high": 0.7448036515733456
+      },
+      "medianMs": 2331.5878749999974,
+      "costMicros": 49362,
+      "complete": true,
+      "stopReason": null,
+      "bands": [
+        {
+          "band": "Foundation",
+          "total": 8,
+          "successes": 5
+        },
+        {
+          "band": "Intermediate",
+          "total": 8,
+          "successes": 4
+        },
+        {
+          "band": "Advanced",
+          "total": 8,
+          "successes": 6
+        },
+        {
+          "band": "Expert",
+          "total": 8,
+          "successes": 4
+        }
+      ],
+      "evidence": "/benchmarks/tactics/google--gemini-4-argon.json",
+      "unknownCostAttempts": 1,
+      "fixtureHash": "ebe40e59222b16b4b760e5dd0722a70400fe697e46cf2c3f814a58d2442e6466"
+    },
+    {
+      "id": "openai--gpt-6-luna",
+      "model": "openai/gpt-6-luna",
+      "label": "GPT-6 Luna",
+      "kind": "model",
+      "reasoning": {
+        "effort": "low"
+      },
+      "configHash": null,
+      "config": null,
+      "total": 32,
+      "attempted": 32,
+      "successes": 5,
+      "errors": 9,
+      "accuracy": 0.15625,
+      "interval": {
+        "low": 0.0686442028250571,
+        "high": 0.3175414959753039
+      },
+      "medianMs": 13083.001499999955,
+      "costMicros": 14028,
+      "complete": true,
+      "stopReason": null,
+      "bands": [
+        {
+          "band": "Foundation",
+          "total": 8,
+          "successes": 3
+        },
+        {
+          "band": "Intermediate",
+          "total": 8,
+          "successes": 0
+        },
+        {
+          "band": "Advanced",
+          "total": 8,
+          "successes": 1
+        },
+        {
+          "band": "Expert",
+          "total": 8,
+          "successes": 1
+        }
+      ],
+      "evidence": "/benchmarks/tactics/openai--gpt-6-luna.json",
+      "unknownCostAttempts": 0,
+      "fixtureHash": "ebe40e59222b16b4b760e5dd0722a70400fe697e46cf2c3f814a58d2442e6466"
+    },
+    {
+      "id": "google--gemini-2.5-flash-lite",
+      "model": "google/gemini-2.5-flash-lite",
+      "label": "Gemini 2.5 Flash Lite",
+      "kind": "model",
+      "reasoning": {
+        "enabled": false
+      },
+      "configHash": null,
+      "config": null,
+      "total": 32,
+      "attempted": 32,
+      "successes": 4,
+      "errors": 1,
+      "accuracy": 0.125,
+      "interval": {
+        "low": 0.04970134387480073,
+        "high": 0.2806830548165022
+      },
+      "medianMs": 999.0035839999327,
+      "costMicros": 1450,
+      "complete": true,
+      "stopReason": null,
+      "bands": [
+        {
+          "band": "Foundation",
+          "total": 8,
+          "successes": 2
+        },
+        {
+          "band": "Intermediate",
+          "total": 8,
+          "successes": 0
+        },
+        {
+          "band": "Advanced",
+          "total": 8,
+          "successes": 1
+        },
+        {
+          "band": "Expert",
+          "total": 8,
+          "successes": 1
+        }
+      ],
+      "evidence": "/benchmarks/tactics/google--gemini-2.5-flash-lite.json",
+      "unknownCostAttempts": 0,
+      "fixtureHash": "ebe40e59222b16b4b760e5dd0722a70400fe697e46cf2c3f814a58d2442e6466"
+    },
+    {
+      "id": "qwen--qwen3-32b",
+      "model": "qwen/qwen3-32b",
+      "label": "Qwen3 32B",
+      "kind": "model",
+      "reasoning": {
+        "enabled": false
+      },
+      "configHash": null,
+      "config": null,
+      "total": 32,
+      "attempted": 32,
+      "successes": 1,
+      "errors": 0,
+      "accuracy": 0.03125,
+      "interval": {
+        "low": 0.005537860164003122,
+        "high": 0.15744263820012558
+      },
+      "medianMs": 1391.7761249999749,
+      "costMicros": 859,
+      "complete": true,
+      "stopReason": null,
+      "bands": [
+        {
+          "band": "Foundation",
+          "total": 8,
+          "successes": 1
+        },
+        {
+          "band": "Intermediate",
+          "total": 8,
+          "successes": 0
+        },
+        {
+          "band": "Advanced",
+          "total": 8,
+          "successes": 0
+        },
+        {
+          "band": "Expert",
+          "total": 8,
+          "successes": 0
+        }
+      ],
+      "evidence": "/benchmarks/tactics/qwen--qwen3-32b.json",
+      "unknownCostAttempts": 0,
+      "fixtureHash": "ebe40e59222b16b4b760e5dd0722a70400fe697e46cf2c3f814a58d2442e6466"
+    },
+    {
+      "id": "b42f1b88-8ba0-4418-9fc8-159ad65da3cc",
+      "model": null,
+      "label": "queen gambit",
+      "kind": "harness",
+      "reasoning": null,
+      "configHash": "35c22be579a87b1ffed6cf148ec127df2fb67a2e73020e4be036b2069e486068",
+      "config": {
+        "brain": "search",
+        "depth": 2,
+        "label": "Opening build",
+        "model": "openai/gpt-4.1-mini",
+        "notes": "",
+        "center": false,
+        "memory": "recent",
+        "prompt": "Choose the strongest legal move.",
+        "safety": true,
+        "mateGuard": true
+      },
+      "total": 32,
+      "attempted": 32,
+      "successes": 12,
+      "errors": 0,
+      "accuracy": 0.375,
+      "interval": {
+        "low": 0.22933887309454212,
+        "high": 0.5474559264692255
+      },
+      "medianMs": 293.05287500005215,
+      "costMicros": 0,
+      "complete": true,
+      "stopReason": null,
+      "bands": [
+        {
+          "band": "Foundation",
+          "total": 8,
+          "successes": 3
+        },
+        {
+          "band": "Intermediate",
+          "total": 8,
+          "successes": 3
+        },
+        {
+          "band": "Advanced",
+          "total": 8,
+          "successes": 2
+        },
+        {
+          "band": "Expert",
+          "total": 8,
+          "successes": 4
+        }
+      ],
+      "evidence": "/benchmarks/tactics/b42f1b88-8ba0-4418-9fc8-159ad65da3cc.json",
+      "unknownCostAttempts": 0,
+      "fixtureHash": "ebe40e59222b16b4b760e5dd0722a70400fe697e46cf2c3f814a58d2442e6466"
+    },
+    {
+      "id": "43887069-a243-4144-abe1-91348602fc93",
+      "model": null,
+      "label": "Launch Demo",
+      "kind": "harness",
+      "reasoning": null,
+      "configHash": "abc2eaa536206b1bf51c80e9a3dfbc6c3773f38d199c7a67def56c5ae14bea95",
+      "config": {
+        "brain": "search",
+        "depth": 2,
+        "label": "Opening build",
+        "model": "openai/gpt-4.1-mini",
+        "notes": "Public launch verification. Arena-executed two-ply search with mate radar and safety check.",
+        "center": false,
+        "memory": "recent",
+        "prompt": "Choose the strongest legal move.",
+        "safety": true,
+        "mateGuard": true
+      },
+      "total": 32,
+      "attempted": 32,
+      "successes": 12,
+      "errors": 0,
+      "accuracy": 0.375,
+      "interval": {
+        "low": 0.22933887309454212,
+        "high": 0.5474559264692255
+      },
+      "medianMs": 306.4305829999503,
+      "costMicros": 0,
+      "complete": true,
+      "stopReason": null,
+      "bands": [
+        {
+          "band": "Foundation",
+          "total": 8,
+          "successes": 3
+        },
+        {
+          "band": "Intermediate",
+          "total": 8,
+          "successes": 3
+        },
+        {
+          "band": "Advanced",
+          "total": 8,
+          "successes": 2
+        },
+        {
+          "band": "Expert",
+          "total": 8,
+          "successes": 4
+        }
+      ],
+      "evidence": "/benchmarks/tactics/43887069-a243-4144-abe1-91348602fc93.json",
+      "unknownCostAttempts": 0,
+      "fixtureHash": "ebe40e59222b16b4b760e5dd0722a70400fe697e46cf2c3f814a58d2442e6466"
+    },
+    {
+      "id": "03a2865d-cf5d-433c-bcfc-f9d5a60df0b5",
+      "model": null,
+      "label": "GitHub Starter",
+      "kind": "harness",
+      "reasoning": null,
+      "configHash": "26681152f45fd5d036c1f64e72af1d4a6b3a8115cd025c00c37be3b031a0f5ab",
+      "config": {
+        "brain": "search",
+        "depth": 2,
+        "label": "Opening build",
+        "model": "openai/gpt-4.1-mini",
+        "notes": "Starter build created through GitHub sign-in. Two-ply search with mate radar, safety checks, and recent-move memory.",
+        "center": false,
+        "memory": "recent",
+        "prompt": "Choose the strongest legal move.",
+        "safety": true,
+        "mateGuard": true
+      },
+      "total": 32,
+      "attempted": 32,
+      "successes": 12,
+      "errors": 0,
+      "accuracy": 0.375,
+      "interval": {
+        "low": 0.22933887309454212,
+        "high": 0.5474559264692255
+      },
+      "medianMs": 404.8559590000659,
+      "costMicros": 0,
+      "complete": true,
+      "stopReason": null,
+      "bands": [
+        {
+          "band": "Foundation",
+          "total": 8,
+          "successes": 3
+        },
+        {
+          "band": "Intermediate",
+          "total": 8,
+          "successes": 3
+        },
+        {
+          "band": "Advanced",
+          "total": 8,
+          "successes": 2
+        },
+        {
+          "band": "Expert",
+          "total": 8,
+          "successes": 4
+        }
+      ],
+      "evidence": "/benchmarks/tactics/03a2865d-cf5d-433c-bcfc-f9d5a60df0b5.json",
+      "unknownCostAttempts": 0,
+      "fixtureHash": "ebe40e59222b16b4b760e5dd0722a70400fe697e46cf2c3f814a58d2442e6466"
+    },
+    {
+      "id": "anthropic--claude-haiku-5.5",
+      "model": "anthropic/claude-haiku-5.5",
+      "label": "Claude Haiku 5.5",
+      "kind": "model",
+      "reasoning": {
+        "effort": "low"
+      },
+      "configHash": null,
+      "config": null,
+      "unknownCostAttempts": 1,
+      "total": 32,
+      "attempted": 32,
+      "successes": 3,
+      "errors": 23,
+      "accuracy": 0.09375,
+      "interval": {
+        "low": 0.032401551298366194,
+        "high": 0.24218154728387864
+      },
+      "medianMs": 9019.595084,
+      "costMicros": 16777,
+      "complete": true,
+      "stopReason": null,
+      "bands": [
+        {
+          "band": "Foundation",
+          "total": 8,
+          "successes": 1
+        },
+        {
+          "band": "Intermediate",
+          "total": 8,
+          "successes": 0
+        },
+        {
+          "band": "Advanced",
+          "total": 8,
+          "successes": 1
+        },
+        {
+          "band": "Expert",
+          "total": 8,
+          "successes": 1
+        }
+      ],
+      "evidence": "/benchmarks/tactics/anthropic--claude-haiku-5.5.json",
+      "fixtureHash": "ebe40e59222b16b4b760e5dd0722a70400fe697e46cf2c3f814a58d2442e6466"
+    }
+  ]
+}

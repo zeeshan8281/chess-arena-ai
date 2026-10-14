@@ -1,0 +1,14 @@
+import {readFile,writeFile} from 'node:fs/promises';
+import {createHash} from 'node:crypto';
+import {evaluatePolicy,type PolicyFactory} from '../src/evaluation';
+import {openRouterMove,parseMove,RESERVE_MICROS} from '../src/openrouter';
+const apiKey=process.env.OPENROUTER_API_KEY;if(!apiKey)throw Error('OPENROUTER_API_KEY required');
+const res=await fetch('https://openrouter.ai/api/v1/key',{headers:{Authorization:'Bearer '+apiKey}});if(!res.ok)throw Error('Cannot check spend');const {data}=await res.json();if(typeof data.usage!=='number'||!Number.isFinite(data.usage)||data.usage+1>5)throw Error('Cannot fit $1 benchmark allowance under $5 total cap');
+let used=0,blocked=false;const timings:number[]=[],calls:any[]=[];
+const hash=createHash('sha256');for(const f of ['src/openrouter.ts','src/evaluation.ts','src/rules.ts','scripts/benchmark-argon.ts'])hash.update(await readFile(f));const sourceHash=hash.digest('hex');
+const create:PolicyFactory=()=>async turn=>{if(blocked||used+RESERVE_MICROS>1000000)throw Error('Benchmark budget or provider failure stopped further calls');used+=RESERVE_MICROS;const started=performance.now();try{const reply=await openRouterMove('google/gemini-4-argon',turn,{apiKey});if(reply.costMicros===null)throw Error('Unknown cost');used+=reply.costMicros-RESERVE_MICROS;const move=parseMove(reply.content,turn.legalMoves);timings.push(performance.now()-started);calls.push({model:reply.model,move,costMicros:reply.costMicros,latencyMs:reply.latencyMs});await writeFile('verification/argon-benchmark-spend.json',JSON.stringify({used,calls},null,2));return move}catch(e){blocked=true;throw e}};
+const result=await evaluatePolicy('argon-low-v1',create,n=>console.log(`Argon: ${n}/8 · $${(used/1e6).toFixed(4)}`),sourceHash);
+await writeFile('public/benchmarks/argon-low-v1.json',JSON.stringify({...result,model:'google/gemini-4-argon',thinking:'low',costMicros:used,calls},null,2)+'\n');
+if(blocked||result.totals.errors)throw Error('Benchmark incomplete; raw evidence saved but homepage not updated');
+timings.sort((a,b)=>a-b);const percentile=(p:number)=>Number(timings[Math.floor((timings.length-1)*p)].toFixed(3));
+const summary=JSON.parse(await readFile('public/benchmarks/summary.json','utf8'));summary.rows=summary.rows.filter((r:any)=>r.id!=='argon-low-v1');summary.rows.push({id:'argon-low-v1',label:'Gemini 4 Argon',detail:'OpenRouter · low reasoning',games:result.games.length,...result.totals,decisions:timings.length,medianMs:percentile(.5),p95Ms:percentile(.95),meanPlies:Number((result.games.reduce((n,g)=>n+g.plies,0)/8).toFixed(1)),evidence:'/benchmarks/argon-low-v1.json',execution:'remote',costMicros:used,sourceHash});summary.generatedAt=new Date().toISOString();await writeFile('public/benchmarks/summary.json',JSON.stringify(summary,null,2)+'\n');console.log(JSON.stringify(result.totals));
